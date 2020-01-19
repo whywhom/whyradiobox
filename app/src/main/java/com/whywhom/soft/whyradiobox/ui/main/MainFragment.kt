@@ -2,24 +2,30 @@ package com.whywhom.soft.whyradiobox.ui.main
 
 import android.app.SearchManager
 import android.content.Context
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.whywhom.soft.whyradiobox.R
-import javax.inject.Inject
+import com.whywhom.soft.whyradiobox.adapter.PodcastListAdapter
+import com.whywhom.soft.whyradiobox.extensions.setListener
+import com.whywhom.soft.whyradiobox.interfaces.RecyclerListener
+import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
+import com.whywhom.soft.whyradiobox.ui.detail.PodcastDetailActivity
+import kotlinx.android.synthetic.main.main_fragment.*
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
     private var searchMenuItem: MenuItem? = null
     private var isSearchOpen = false
     private var skipItemUpdating = false
     private var lastSearchedText = ""
 
+    var podcastList:ArrayList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
     companion object {
         fun newInstance() = MainFragment()
     }
@@ -41,11 +47,32 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
+        val adapter = PodcastListAdapter(podcastList,context)
+        adapter.setOnItemClick(this)
+        podcast_list.layoutManager = LinearLayoutManager(activity)
+        podcast_list.adapter = adapter
+        podcast_list.setListener(object : RecyclerListener {
+            override fun loadMore() {
+
+            }
+
+            override fun refresh() {
+                swipeRefreshLayout.setRefreshing(true)
+                viewModel.getTopPodcastList()
+            }
+        })
         viewModel.podcastListLiveData.observe(viewLifecycleOwner, Observer { it->
             var len = it.size
+            podcastList = it
+            adapter.submitList(podcastList)
+            adapter.notifyDataSetChanged()
+            swipeRefreshLayout.setRefreshing(false);
         })
-        viewModel.getPodcastList()
+        swipeRefreshLayout.post(Runnable {
+            swipeRefreshLayout.setRefreshing(true)
+            viewModel.getTopPodcastList()
+        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -97,7 +124,9 @@ class MainFragment : Fragment() {
     }
 
     fun searchQueryChanged(searchText: String) {
-
+        Log.d("MainFragment","searchQueryChanged() get "+searchText)
+        if(searchText.isEmpty()) return
+        viewModel.itunesPodcastSearcher(searchText)
     }
 
     fun searchOpened() {
@@ -111,5 +140,14 @@ class MainFragment : Fragment() {
         }
         skipItemUpdating = false
         lastSearchedText = ""
+    }
+
+    override fun onItemClicked(position: Int) {
+        var entry = podcastList.get(position)
+        if (entry.feedUrl == null) {
+            return
+        }
+        val intent = PodcastDetailActivity.newIntent(this.context, entry)
+        startActivity(intent)
     }
 }

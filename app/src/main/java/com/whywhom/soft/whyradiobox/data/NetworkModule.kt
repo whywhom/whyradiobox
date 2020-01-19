@@ -12,16 +12,14 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Created by wuhaoyong on 2020-01-12.
  */
 @Module
-class NetworkModule {
+object NetworkModule {
     val itunesBaseUrl = "https://itunes.apple.com/"
     private var ipService: NetworkApiService
     private var logging: HttpLoggingInterceptor
 
-    companion object {
-        //此类接口的基地址
-        private lateinit var retrofit: Retrofit
-        private lateinit var client: OkHttpClient
-    }
+    //此类接口的基地址
+    private lateinit var retrofit: Retrofit
+    private lateinit var client: OkHttpClient
 
     init{
         logging = HttpLoggingInterceptor();

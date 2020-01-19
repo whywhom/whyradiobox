@@ -1,44 +1,89 @@
 package com.whywhom.soft.whyradiobox.ui.main
 
-import android.net.Network
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.whywhom.soft.whyradiobox.data.NetworkModule
-import com.whywhom.soft.whyradiobox.data.source.Podcast
 import com.whywhom.soft.whyradiobox.model.ItunesPodcastSearcher
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
-import okhttp3.Callback
+import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
-import javax.inject.Inject
+import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class MainViewModel : ViewModel() {
-    private var podcastList: ArrayList<Podcast> = ArrayList(0)
-    var podcastListLiveData = MutableLiveData<ArrayList<Podcast>>()
-    // TODO: Implement the ViewModel
-    fun getPodcastList() {
-        var network:NetworkModule = NetworkModule()
-        network.provideRetrofitService()
-            .getTopList("us","20").enqueue(
+    private var podcastList: ArrayList<PodcastSearchResult> = ArrayList(0)
+    var podcastListLiveData = MutableLiveData<ArrayList<PodcastSearchResult>>()
+
+    fun getTopPodcastList() {
+        var country: String = Locale.getDefault().getCountry().decapitalize()
+        podcastList.clear()
+        NetworkModule.provideRetrofitService()
+            .getTopList(country,"50").enqueue(
                 object : retrofit2.Callback<ResponseBody> {
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                         var throwable = t
+                        podcastList.clear()
+                        podcastListLiveData.postValue(podcastList)
                     }
                     override fun onResponse(
                         call: Call<ResponseBody>,
                         response: Response<ResponseBody>) {
                         var rsp = response.body()!!.string()
-                        Log.d("MainViewModel",rsp)
+                        val result = JSONObject(rsp)
+                        val feed: JSONObject = result.getJSONObject("feed")
+                        val entries = feed.getJSONArray("entry")
                         var itunesPodcastSearcher: ItunesPodcastSearcher =
                         Gson().fromJson(rsp,ItunesPodcastSearcher::class.java)
-                        var list = itunesPodcastSearcher.feed.entry
+                        var i = 0
+                        for (i in 0 until entries.length()) {
+                            val json = entries.getJSONObject(i)
+                            podcastList.add(PodcastSearchResult.fromItunesToplist(json));
+                        }
+                        podcastListLiveData.postValue(podcastList)
+                    }
+
+                }
+            )
+    }
+
+    fun itunesPodcastSearcher(searchText: String) {
+//        var encodedQuery: String
+//        try {
+//            encodedQuery = URLEncoder.encode(searchText, "UTF-8")
+//        } catch (e: UnsupportedEncodingException) { // this won't ever be thrown
+//            encodedQuery = searchText
+//        }
+        NetworkModule.provideRetrofitService()
+            .search(searchText).enqueue(
+                object : retrofit2.Callback<ResponseBody> {
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        var throwable = t
+                        podcastList.clear()
+                        podcastListLiveData.postValue(podcastList)
+                    }
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>) {
+                        if (response.isSuccessful) {
+                            val resultString = response.body()!!.string()
+                            val result = JSONObject(resultString)
+                            val j = result.getJSONArray("results")
+                            podcastList.clear()
+                            for (i in 0 until j.length()) {
+                                val podcastJson = j.getJSONObject(i)
+                                val podcast =
+                                    PodcastSearchResult.fromItunes(podcastJson)
+                                podcastList.add(podcast)
+                            }
+                        } else {
+                            podcastList.clear()
+                        }
+                        podcastListLiveData.postValue(podcastList)
                     }
 
                 }
