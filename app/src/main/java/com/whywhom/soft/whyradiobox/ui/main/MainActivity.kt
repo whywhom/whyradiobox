@@ -8,7 +8,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fragment: MainFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             fragment = MainFragment.newInstance()
             supportFragmentManager.beginTransaction()

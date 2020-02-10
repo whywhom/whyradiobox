@@ -94,4 +94,6 @@
     <string name="action_settings">Settings</string>
     <string name="subscribe">subscribe</string>
     <string name="cover_label">Picture</string>
+    <string name="show_more">more »</string>
+    <string name="show_less">less »</string>
 </resources>

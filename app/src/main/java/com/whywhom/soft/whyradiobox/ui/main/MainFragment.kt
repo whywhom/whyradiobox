@@ -17,7 +17,8 @@ import com.whywhom.soft.whyradiobox.extensions.setListener
 import com.whywhom.soft.whyradiobox.interfaces.RecyclerListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.ui.detail.PodcastDetailActivity
-import kotlinx.android.synthetic.main.main_fragment.*
+import kotlinx.android.synthetic.main.fragment_main.*
+
 
 class MainFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
     private var searchMenuItem: MenuItem? = null
@@ -36,7 +37,7 @@ class MainFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,7 +73,7 @@ class MainFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
             swipeRefreshLayout.setRefreshing(true)
             viewModel.getTopPodcastList()
         })
-
+        swipeRefreshLayout.setEnabled(false);//设置为不能刷新
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

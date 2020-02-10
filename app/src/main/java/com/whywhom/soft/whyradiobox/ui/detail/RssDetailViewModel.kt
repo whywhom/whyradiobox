@@ -19,7 +19,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 
-class PodcastDetailViewModel : ViewModel() {
+class RssDetailViewModel : ViewModel() {
 
     var feedUrlLiveData = MutableLiveData<RSSFeed>()
     fun getItemFeedUrl(podcast: PodcastSearchResult) {
