@@ -92,4 +92,6 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="subscribe">subscribe</string>
+    <string name="cover_label">Picture</string>
 </resources>
