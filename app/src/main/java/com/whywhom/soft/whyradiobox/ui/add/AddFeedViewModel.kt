@@ -1,4 +1,4 @@
-package com.whywhom.soft.whyradiobox.ui.main
+package com.whywhom.soft.whyradiobox.ui.add
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,12 +10,11 @@ import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
-import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MainViewModel : ViewModel() {
+class AddFeedViewModel : ViewModel() {
     private var podcastList: ArrayList<PodcastSearchResult> = ArrayList(0)
     var podcastListLiveData = MutableLiveData<ArrayList<PodcastSearchResult>>()
 

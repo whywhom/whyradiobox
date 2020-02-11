@@ -96,4 +96,6 @@
     <string name="cover_label">Picture</string>
     <string name="show_more">more »</string>
     <string name="show_less">less »</string>
+    <string name="find">Find</string>
+    <string name="setting">Settings</string>
 </resources>

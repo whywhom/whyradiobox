@@ -1,4 +1,4 @@
-package com.whywhom.soft.whyradiobox.ui.main
+package com.whywhom.soft.whyradiobox.ui.add
 
 import android.app.SearchManager
 import android.content.Context
@@ -17,10 +17,10 @@ import com.whywhom.soft.whyradiobox.extensions.setListener
 import com.whywhom.soft.whyradiobox.interfaces.RecyclerListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.ui.detail.PodcastDetailActivity
-import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_add_feed.*
 
 
-class MainFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
+class AddFeedFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
     private var searchMenuItem: MenuItem? = null
     private var isSearchOpen = false
     private var skipItemUpdating = false
@@ -28,16 +28,18 @@ class MainFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
 
     var podcastList:ArrayList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
     companion object {
-        fun newInstance() = MainFragment()
+        val TAG: String = "AddFeedFragment"
+
+        fun newInstance() = AddFeedFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: AddFeedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        return inflater.inflate(R.layout.fragment_add_feed, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +49,7 @@ class MainFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(AddFeedViewModel::class.java)
         val adapter = PodcastListAdapter(podcastList,context)
         adapter.setOnItemClick(this)
         podcast_list.layoutManager = LinearLayoutManager(activity)
@@ -94,7 +96,7 @@ class MainFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         val searchManager = context!!.getSystemService(Context.SEARCH_SERVICE) as SearchManager
         searchMenuItem = menu.findItem(R.id.search)
         (searchMenuItem!!.actionView as SearchView).apply {
-            setSearchableInfo(searchManager.getSearchableInfo(this@MainFragment.activity!!.componentName))
+            setSearchableInfo(searchManager.getSearchableInfo(this@AddFeedFragment.activity!!.componentName))
             isSubmitButtonEnabled = false
             queryHint = getString(R.string.search)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
