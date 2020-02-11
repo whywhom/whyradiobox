@@ -1,21 +1,35 @@
 package com.whywhom.soft.whyradiobox.adapter
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource
+import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.util.Util
 import com.whywhom.soft.whyradiobox.R
+import com.whywhom.soft.whyradiobox.RBApplication
+import com.whywhom.soft.whyradiobox.interfaces.OnPlayListener
 import com.whywhom.soft.whyradiobox.rss.RSSItem
+import com.whywhom.soft.whyradiobox.utils.PlayerUtil
 import java.text.SimpleDateFormat
 
 /**
  * Created by wuhaoyong on 2020-02-10.
  */
 class FeedListAdapter(val mContext: Context, val rssList: ArrayList<RSSItem>) : RecyclerView.Adapter<FeedListAdapter.PodcastViewHolder>() {
-
+    private lateinit var playListerer: OnPlayListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PodcastViewHolder {
         return PodcastViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.rss_cardview_item,parent,false))
@@ -25,6 +39,9 @@ class FeedListAdapter(val mContext: Context, val rssList: ArrayList<RSSItem>) : 
         return rssList.count()
     }
 
+    fun setOnPlayListener(listener:OnPlayListener){
+        playListerer = listener
+    }
     override fun onBindViewHolder(holder: PodcastViewHolder, position: Int) {
         val itemData = rssList[position]
         holder.titleView.setText(itemData.title)
@@ -32,21 +49,24 @@ class FeedListAdapter(val mContext: Context, val rssList: ArrayList<RSSItem>) : 
         val dateString = formatter.format(itemData.pubDate)
         holder.dateView.text = dateString
         holder.detailView.text = itemData.description
+        holder.mediaPlay.setOnClickListener(View.OnClickListener {
+            playListerer.play(position)
+        })
     }
 
     inner class PodcastViewHolder(view: View) : RecyclerView.ViewHolder(view){
         var cardView: CardView
-
         val titleView: TextView
         val dateView: TextView
         val detailView: TextView
-
+        val mediaPlay: ImageView
 
         init {
             cardView = view.findViewById(R.id.card_view) as CardView
             titleView = view.findViewById(R.id.item_title) as TextView
             dateView = view.findViewById(R.id.item_data)
             detailView = view.findViewById(R.id.item_detail) as TextView
+            mediaPlay = view.findViewById(R.id.media_play) as ImageView
         }
     }
 

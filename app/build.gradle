@@ -12,6 +12,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -19,6 +20,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -82,4 +86,8 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
     // swiperefreshlayout
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    //ExoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.10.8'
+    //multidex
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

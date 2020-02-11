@@ -11,42 +11,55 @@
     card_view:cardElevation="3dp"
     card_view:contentPadding="4dp" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp" >
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/media_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/listen_48px" />
+
+        <LinearLayout
+            android:id="@+id/gap"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_toStartOf="@id/media_play"
+            android:background="@color/colorPrimary"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3"
-            android:id="@+id/line1">
+            android:layout_toStartOf="@id/gap"
+            android:orientation="vertical"
+            android:padding="8dp" >
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_title"
-                android:layout_weight="1"
                 android:textColor="@android:color/holo_blue_dark"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_data"
-                android:gravity="right"
-                android:layout_weight="2"
                 android:textColor="@android:color/holo_blue_dark"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/item_detail"
+                android:maxLines="3"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"/>
+
         </LinearLayout>
+    </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/item_detail"
-            android:maxLines="3"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"/>
-
-    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

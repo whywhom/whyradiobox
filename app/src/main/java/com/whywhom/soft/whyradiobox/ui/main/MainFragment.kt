@@ -73,7 +73,7 @@ class MainFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
             swipeRefreshLayout.setRefreshing(true)
             viewModel.getTopPodcastList()
         })
-        swipeRefreshLayout.setEnabled(false);//设置为不能刷新
+//        swipeRefreshLayout.setEnabled(false);//设置为不能刷新
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
