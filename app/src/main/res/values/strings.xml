@@ -98,4 +98,7 @@
     <string name="show_less">less »</string>
     <string name="find">Find</string>
     <string name="setting">Settings</string>
+    <string name="add_feed">Add Podcast</string>
+    <string name="playback">playback</string>
+
 </resources>

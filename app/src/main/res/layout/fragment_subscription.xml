@@ -5,9 +5,22 @@
     android:layout_height="match_parent"
     tools:context=".ui.subscription.SubscriptionFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/subscribe_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/subscriptions_add"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="bottom|end"
+        android:contentDescription="@string/add_feed"
+        android:src="@drawable/ic_add_white_24dp"
+        />
 
 </FrameLayout>

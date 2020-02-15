@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import com.whywhom.soft.whyradiobox.R
+import com.whywhom.soft.whyradiobox.data.source.local.Podcast
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 
-class PodcastListAdapter(podcastList: ArrayList<PodcastSearchResult>, val context: Context?) :
+class SubscriptionAdapter(val context: Context?, podcastList: ArrayList<Podcast>) :
 RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     lateinit var itemListener: ItemClickListenter
-    lateinit var items:ArrayList<PodcastSearchResult>
+    lateinit var items:ArrayList<Podcast>
     init{
         this.items = podcastList
     }
@@ -24,7 +25,7 @@ RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         itemListener = listener
     }
 
-    fun submitList(list: ArrayList<PodcastSearchResult>) {
+    fun submitList(list: ArrayList<Podcast>) {
         this.items = list
     }
 
@@ -35,34 +36,31 @@ RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.podcast_list_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.gridview, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ViewHolder) {
             var item = items.get(position)
-            var profilePicURL: String? = item.imageUrl
+            var profilePicURL: String? = item.coverurl
             val request: RequestCreator =
                 Picasso.with(context).load(profilePicURL).placeholder(R.drawable.rss_64)
             request.fit()
                 .centerCrop()
-                .into(holder.podcastThumbnail)
+                .into(holder.podcastCover)
             var name = item.title
             holder.podcastName.text = name
-            holder.podcastItem.setOnClickListener(View.OnClickListener {
-                itemListener.onItemClicked(position)
-            })
-            holder.podcastThumbnail.setOnClickListener(View.OnClickListener {
+            holder.podcastCover.setOnClickListener(View.OnClickListener {
                 itemListener.onItemClicked(position)
             })
         }
     }
 
     class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
-        var podcastThumbnail : ImageView = view.findViewById(R.id.itemImage)
-        var podcastName : TextView = view.findViewById(R.id.itemName)
-        var podcastItem : LinearLayout = view.findViewById(R.id.itemContent)
+        var podcastCover : ImageView = view.findViewById(R.id.subscribe_cover)
+        var podcastName : TextView = view.findViewById(R.id.subscribe_title)
+
     }
     interface ItemClickListenter {
         fun onItemClicked(position:Int)

@@ -1,12 +1,12 @@
 package com.whywhom.soft.whyradiobox.ui.main
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -21,6 +21,8 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.adapter.FeedListAdapter
+import com.whywhom.soft.whyradiobox.data.source.local.Podcast
+import com.whywhom.soft.whyradiobox.data.source.local.PodcastDatabase
 import com.whywhom.soft.whyradiobox.interfaces.OnPlayListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.rss.RSSFeed
@@ -28,6 +30,7 @@ import com.whywhom.soft.whyradiobox.rss.RSSItem
 import com.whywhom.soft.whyradiobox.ui.detail.RssDetailViewModel
 import com.whywhom.soft.whyradiobox.utils.PlayerUtil
 import kotlinx.android.synthetic.main.fragment_rss_detail.*
+
 
 class RssDetailFragment : Fragment(), OnPlayListener {
     private lateinit var rssList: ArrayList<RSSItem>
@@ -113,6 +116,11 @@ class RssDetailFragment : Fragment(), OnPlayListener {
                 tv_show_more.text = getString(R.string.show_less)
             }
         }
+
+        btn_subscribe.setOnClickListener{
+            viewModel.subscription(this.context!!)
+        }
+
         val request: RequestCreator =Picasso.with(context).load(itemInfo.imageUrl).placeholder(R.drawable.rss_64)
         request.fit()
             .centerCrop()
