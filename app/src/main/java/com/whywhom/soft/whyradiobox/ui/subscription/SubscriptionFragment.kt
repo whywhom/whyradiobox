@@ -2,6 +2,8 @@ package com.whywhom.soft.whyradiobox.ui.subscription
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +19,7 @@ import com.whywhom.soft.whyradiobox.ui.add.AddFeedActivity
 import com.whywhom.soft.whyradiobox.ui.add.AddFeedFragment
 import kotlinx.android.synthetic.main.fragment_subscription.*
 
-class SubscriptionFragment : Fragment() {
+class SubscriptionFragment() : Fragment(), SubscriptionAdapter.ItemClickListenter {
     private lateinit var subscription: ArrayList<Podcast>
     companion object {
         val TAG: String = "SubscriptionFragment"
@@ -27,6 +29,10 @@ class SubscriptionFragment : Fragment() {
 
     private val numberOfColumns: Int = 4
     private lateinit var viewModel: SubscriptionViewModel
+
+    constructor(parcel: Parcel) : this() {
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +60,7 @@ class SubscriptionFragment : Fragment() {
         }
         viewModel.podcastlLiveData.observe(this, Observer{
             val adapter = SubscriptionAdapter(this.context!!, viewModel.getSubscriptionData().value!!)
+            adapter.setOnItemClick(this)
             subscribe_list.adapter = adapter
         })
     }
@@ -72,4 +79,9 @@ class SubscriptionFragment : Fragment() {
             viewModel.readSubscriptionData(this.context!!)
         }
     }
+
+    override fun onItemClicked(position: Int) {
+
+    }
+
 }

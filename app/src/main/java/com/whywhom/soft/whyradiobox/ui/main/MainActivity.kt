@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.ui.add.AddFeedFragment
+import com.whywhom.soft.whyradiobox.ui.episodes.EpisodesFragment
 import com.whywhom.soft.whyradiobox.ui.setting.SettingsFragment
 import com.whywhom.soft.whyradiobox.ui.subscription.SubscriptionFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     val NAV_TAGS = arrayOf<String>(
         SubscriptionFragment.TAG,
-//        EpisodesFragment.TAG,
+        EpisodesFragment.TAG,
         AddFeedFragment.TAG,
         SettingsFragment.TAG
     )
@@ -41,13 +42,22 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.container, fragment)
                     .commitNow()
+                title = getString(R.string.subscribe)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.nav_find -> {
-                fragment = AddFeedFragment.newInstance()
+//            R.id.nav_find -> {
+//                fragment = AddFeedFragment.newInstance()
+//                supportFragmentManager.beginTransaction()
+//                    .replace(R.id.container, fragment)
+//                    .commitNow()
+//                return@OnNavigationItemSelectedListener true
+//            }
+            R.id.nav_episodes -> {
+                fragment = EpisodesFragment.newInstance()
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.container, fragment)
                     .commitNow()
+                title = getString(R.string.episodes)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.nav_settings -> {
@@ -55,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.container, fragment)
                     .commitNow()
+                title = getString(R.string.setting)
                 return@OnNavigationItemSelectedListener true
             }
         }

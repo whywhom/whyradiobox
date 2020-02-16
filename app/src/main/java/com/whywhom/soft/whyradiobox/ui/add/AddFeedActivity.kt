@@ -25,13 +25,12 @@ class AddFeedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_feed)
-
+        title = getString(R.string.add_podcast)
         if (savedInstanceState == null) {
             fragment = AddFeedFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commitNow()
-
         }
     }
 }

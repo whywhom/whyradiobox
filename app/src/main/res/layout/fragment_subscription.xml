@@ -20,7 +20,7 @@
         android:layout_margin="16dp"
         android:layout_gravity="bottom|end"
         android:contentDescription="@string/add_feed"
-        android:src="@drawable/ic_add_white_24dp"
+        android:src="@drawable/ic_add_white_24"
         />
 
 </FrameLayout>
