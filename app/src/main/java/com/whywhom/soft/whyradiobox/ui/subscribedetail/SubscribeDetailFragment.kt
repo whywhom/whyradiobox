@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.whywhom.soft.whyradiobox.ui.subscribedetail.R
+import com.whywhom.soft.whyradiobox.R
 
 class SubscribeDetailFragment : Fragment() {
 

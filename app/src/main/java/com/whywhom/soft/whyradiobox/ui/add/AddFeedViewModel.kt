@@ -57,35 +57,34 @@ class AddFeedViewModel : ViewModel() {
 //        } catch (e: UnsupportedEncodingException) { // this won't ever be thrown
 //            encodedQuery = searchText
 //        }
-        NetworkModule.provideRetrofitService()
-            .search(searchText).enqueue(
-                object : retrofit2.Callback<ResponseBody> {
-                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                        var throwable = t
-                        podcastList.clear()
-                        podcastListLiveData.postValue(podcastList)
-                    }
-                    override fun onResponse(
-                        call: Call<ResponseBody>,
-                        response: Response<ResponseBody>) {
-                        if (response.isSuccessful) {
-                            val resultString = response.body()!!.string()
-                            val result = JSONObject(resultString)
-                            val j = result.getJSONArray("results")
-                            podcastList.clear()
-                            for (i in 0 until j.length()) {
-                                val podcastJson = j.getJSONObject(i)
-                                val podcast =
-                                    PodcastSearchResult.fromItunes(podcastJson)
-                                podcastList.add(podcast)
-                            }
-                        } else {
-                            podcastList.clear()
-                        }
-                        podcastListLiveData.postValue(podcastList)
-                    }
-
+        NetworkModule.provideRetrofitService().search(searchText).enqueue(
+            object : retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    var throwable = t
+                    podcastList.clear()
+                    podcastListLiveData.postValue(podcastList)
                 }
-            )
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+                        val resultString = response.body()!!.string()
+                        val result = JSONObject(resultString)
+                        val j = result.getJSONArray("results")
+                        podcastList.clear()
+                        for (i in 0 until j.length()) {
+                            val podcastJson = j.getJSONObject(i)
+                            val podcast =
+                                PodcastSearchResult.fromItunes(podcastJson)
+                            podcastList.add(podcast)
+                        }
+                    } else {
+                        podcastList.clear()
+                    }
+                    podcastListLiveData.postValue(podcastList)
+                }
+
+            }
+        )
     }
 }
