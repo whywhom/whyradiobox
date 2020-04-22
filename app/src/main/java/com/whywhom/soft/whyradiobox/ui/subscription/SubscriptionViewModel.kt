@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.whywhom.soft.whyradiobox.data.source.local.Podcast
+import com.whywhom.soft.whyradiobox.data.source.local.PodcastDao
 import com.whywhom.soft.whyradiobox.data.source.local.PodcastDatabase
+import javax.inject.Inject
 
 class SubscriptionViewModel : ViewModel() {
     var podcastlLiveData = MutableLiveData<ArrayList<Podcast>>()

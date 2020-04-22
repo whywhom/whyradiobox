@@ -1,4 +1,4 @@
-package com.whywhom.soft.whyradiobox.ui.add
+package com.whywhom.soft.whyradiobox.ui.discovery
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,12 +14,18 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class AddFeedViewModel : ViewModel() {
+class FeedDiscoveryViewModel : ViewModel() {
     private var podcastList: ArrayList<PodcastSearchResult> = ArrayList(0)
     var podcastListLiveData = MutableLiveData<ArrayList<PodcastSearchResult>>()
 
-    fun getTopPodcastList() {
-        var country: String = Locale.getDefault().getCountry().decapitalize()
+    fun getTopPodcastList(searchType: Int) {
+        var country: String = Locale.getDefault().getCountry().decapitalize().toUpperCase()
+        if(searchType == FeedDiscoveryFragment.TYPE_EN){
+            country = "US"
+        }
+        if(searchType == FeedDiscoveryFragment.TYPE_CN){
+            country = "CN"
+        }
         podcastList.clear()
         NetworkModule.provideRetrofitService()
             .getTopList(country,"50").enqueue(

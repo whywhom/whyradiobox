@@ -1,7 +1,6 @@
 package com.whywhom.soft.whyradiobox.ui.main
 
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
@@ -21,32 +21,36 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.adapter.FeedListAdapter
-import com.whywhom.soft.whyradiobox.data.source.local.Podcast
-import com.whywhom.soft.whyradiobox.data.source.local.PodcastDatabase
 import com.whywhom.soft.whyradiobox.interfaces.OnPlayListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.rss.RSSFeed
 import com.whywhom.soft.whyradiobox.rss.RSSItem
-import com.whywhom.soft.whyradiobox.ui.detail.RssDetailViewModel
+import com.whywhom.soft.whyradiobox.ui.detail.OnlineFeedViewModel
+import com.whywhom.soft.whyradiobox.ui.subscribedetail.SubscribeDetailActivity
 import com.whywhom.soft.whyradiobox.utils.PlayerUtil
 import kotlinx.android.synthetic.main.fragment_rss_detail.*
 
 
-class RssDetailFragment : Fragment(), OnPlayListener {
+class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.RssInterface {
+
     private lateinit var rssList: ArrayList<RSSItem>
     private var showMore:Boolean = false
     private var player:SimpleExoPlayer? = null
+    private var isSubscription = false;
     var podcastList:ArrayList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
-    companion object {
-        private lateinit var itemInfo: PodcastSearchResult
 
-        fun newInstance(context: Context?, item: PodcastSearchResult):RssDetailFragment{
-            itemInfo = item
-            return RssDetailFragment()
+
+    companion object {
+        private var feedUrl: String? = ""
+        private var coverUrl:String? =""
+
+        fun newInstance(context: Context?, item: String?):OnlineFeedViewFragment{
+            feedUrl = item
+            return OnlineFeedViewFragment()
         }
     }
 
-    private lateinit var viewModel: RssDetailViewModel
+    private lateinit var viewModel: OnlineFeedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,15 +77,29 @@ class RssDetailFragment : Fragment(), OnPlayListener {
         setHasOptionsMenu(true)//想让Fragment中的onCreateOptionsMenu生效必须先调用setHasOptionsMenu方法，否则Toolbar没有菜单。
         player_control_view.visibility = View.GONE
         super.onViewCreated(view, savedInstanceState)
+        val bundle = savedInstanceState ?: arguments
+        if(bundle != null){
+            feedUrl = bundle.getString("feed_url","")
+            coverUrl = bundle.getString("feed_cover_url","")
+        }
+    }
+
+    private fun checkSubscription(rssFeed: RSSFeed) {
+        viewModel.checkSubscription(this.context!!,rssFeed, this);
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(RssDetailViewModel::class.java)
+        if(feedUrl == null){
+            findNavController().popBackStack();
+        }
+
+        viewModel = ViewModelProvider(this).get(OnlineFeedViewModel::class.java)
         feed_list.layoutManager = LinearLayoutManager(this.context)
-        viewModel = ViewModelProviders.of(this).get(RssDetailViewModel::class.java)
-        viewModel.feedUrlLiveData.observe(this, Observer { rssFeed->
+        viewModel = ViewModelProvider(this).get(OnlineFeedViewModel::class.java)
+        viewModel.feedUrlLiveData.observe(viewLifecycleOwner, Observer { rssFeed->
             if(rssFeed != null){
+                checkSubscription(rssFeed)
                 showDetail(rssFeed!!)
                 showRssList(rssFeed!!)
             }
@@ -89,7 +107,7 @@ class RssDetailFragment : Fragment(), OnPlayListener {
         })
         swipeRefreshLayout.post(Runnable {
             swipeRefreshLayout.setRefreshing(true)
-            viewModel.getItemFeedUrl(itemInfo)
+            viewModel.getItemFeedUrl(feedUrl!!)
         })
         swipeRefreshLayout.setEnabled(false);//设置为不能刷新
     }
@@ -118,10 +136,21 @@ class RssDetailFragment : Fragment(), OnPlayListener {
         }
 
         btn_subscribe.setOnClickListener{
-            viewModel.subscription(this.context!!)
+            if(isSubscription){
+                val data = viewModel.getRss()
+                val intent = SubscribeDetailActivity.newIntent(this.context, data.url)
+                startActivity(intent)
+                findNavController().popBackStack()
+//                var bundle : Bundle = Bundle()
+//                val data = viewModel.getRss()
+//                bundle.putString("data_url", data.url)
+//                findNavController().navigate(R.id.subscribeDetailFragment, bundle);
+            } else {
+                viewModel.subscription(this.context!!, this)
+            }
         }
 
-        val request: RequestCreator =Picasso.with(context).load(itemInfo.imageUrl).placeholder(R.drawable.rss_64)
+        val request: RequestCreator =Picasso.with(context).load(coverUrl).placeholder(R.drawable.rss_64)
         request.fit()
             .centerCrop()
             .into(imgvCover)
@@ -158,5 +187,22 @@ class RssDetailFragment : Fragment(), OnPlayListener {
         player_control_view.player = player
 //        player_control_view.showTimeoutMs = -1
         player!!.prepare(videoSource);
+    }
+
+    private fun updateBtn(it: Boolean) {
+        isSubscription = it;
+        if (it) {
+            btn_subscribe.text = getString(R.string.btn_view)
+        } else {
+            btn_subscribe.text = getString(R.string.subscribe)
+        }
+    }
+
+    override fun isSubscripted(it:Boolean) {
+        updateBtn(it)
+    }
+
+    override fun onSubscriptionSuccess(it: Boolean) {
+        updateBtn(it)
     }
 }

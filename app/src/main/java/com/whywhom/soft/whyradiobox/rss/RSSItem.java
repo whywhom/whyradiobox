@@ -24,7 +24,7 @@ package com.whywhom.soft.whyradiobox.rss;
 public class RSSItem extends RSSBase {
   private final java.util.List<MediaThumbnail> thumbnails;
   private String content;
-	private MediaEnclosure enclosure;
+  private MediaEnclosure enclosure;
 
   /* Internal constructor for RSSHandler */
   RSSItem(byte categoryCapacity, byte thumbnailCapacity) {

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.whywhom.soft.whyradiobox.ui.home.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_nav_home_to_feedDiscoveryFragment"
+            app:destination="@id/feedDiscoveryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_subscribe"
+        android:name="com.whywhom.soft.whyradiobox.ui.subscription.SubscriptionFragment"
+        android:label="@string/subscribe"
+        tools:layout="@layout/fragment_subscription">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_episodes"
+        android:name="com.whywhom.soft.whyradiobox.ui.episodes.EpisodesFragment"
+        android:label="@string/episodes"
+        tools:layout="@layout/fragment_episodes" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.whywhom.soft.whyradiobox.ui.setting.SettingsFragment"
+        android:label="@string/action_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/feedDiscoveryFragment"
+        android:name="com.whywhom.soft.whyradiobox.ui.discovery.FeedDiscoveryFragment"
+        android:label="FeedDiscoveryFragment" >
+        <action
+            android:id="@+id/action_feedDiscoveryFragment_to_onlineFeedViewFragment"
+            app:destination="@id/onlineFeedViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onlineFeedViewFragment"
+        android:name="com.whywhom.soft.whyradiobox.ui.main.OnlineFeedViewFragment"
+        android:label="OnlineFeedViewFragment" />
+</navigation>

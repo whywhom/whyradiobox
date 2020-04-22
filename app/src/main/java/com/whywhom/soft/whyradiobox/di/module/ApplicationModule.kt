@@ -8,6 +8,7 @@ import com.whywhom.soft.whyradiobox.data.source.TasksDataSource
 import com.whywhom.soft.whyradiobox.data.source.local.LocalDataSource
 import com.whywhom.soft.whyradiobox.data.source.local.PodcastDatabase
 import com.whywhom.soft.whyradiobox.data.source.remote.RemoteDataSource
+import com.whywhom.soft.whyradiobox.utils.DATABASE_NAME
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -19,7 +20,7 @@ import javax.inject.Singleton
 /**
  * Created by wuhaoyong on 2020-01-12.
  */
-@Module(includes = [ApplicationModuleBinds::class])
+@Module(includes = [ApplicationModuleBinds::class, DbModule::class])
 object ApplicationModule {
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
@@ -58,7 +59,7 @@ object ApplicationModule {
         return Room.databaseBuilder(
             context.applicationContext,
             PodcastDatabase::class.java,
-            "podcast.db"
+            DATABASE_NAME
         ).build()
     }
 

@@ -1,4 +1,4 @@
-package com.whywhom.soft.whyradiobox.ui.add
+package com.whywhom.soft.whyradiobox.ui.discovery
 
 import android.app.SearchManager
 import android.content.Context
@@ -9,31 +9,33 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.adapter.PodcastListAdapter
 import com.whywhom.soft.whyradiobox.extensions.setListener
 import com.whywhom.soft.whyradiobox.interfaces.RecyclerListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
-import com.whywhom.soft.whyradiobox.ui.detail.PodcastDetailActivity
 import kotlinx.android.synthetic.main.fragment_add_feed.*
 
 
-class AddFeedFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
+class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
     private var searchMenuItem: MenuItem? = null
     private var isSearchOpen = false
     private var skipItemUpdating = false
     private var lastSearchedText = ""
 
+    private var searchType :Int = TYPE_EN;
     var podcastList:ArrayList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
     companion object {
-        val TAG: String = "AddFeedFragment"
-
-        fun newInstance() = AddFeedFragment()
+        val TAG: String = "FeedDiscoveryFragment"
+        const val TYPE_EN : Int = 0;
+        const val TYPE_CN : Int = 1;
+        fun newInstance() = FeedDiscoveryFragment()
     }
 
-    private lateinit var viewModel: AddFeedViewModel
+    private lateinit var viewModel: FeedDiscoveryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,11 +47,15 @@ class AddFeedFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)//想让Fragment中的onCreateOptionsMenu生效必须先调用setHasOptionsMenu方法，否则Toolbar没有菜单。
         super.onViewCreated(view, savedInstanceState)
+        val bundle = savedInstanceState ?: arguments
+        if(bundle != null){
+            searchType = bundle.getInt("search_type")
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AddFeedViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(FeedDiscoveryViewModel::class.java)
         val adapter = PodcastListAdapter(podcastList,context)
         adapter.setOnItemClick(this)
         podcast_list.layoutManager = LinearLayoutManager(activity)
@@ -58,10 +64,9 @@ class AddFeedFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
             override fun loadMore() {
 
             }
-
             override fun refresh() {
                 swipeRefreshLayout.setRefreshing(true)
-                viewModel.getTopPodcastList()
+                viewModel.getTopPodcastList(searchType)
             }
         })
         viewModel.podcastListLiveData.observe(viewLifecycleOwner, Observer { it->
@@ -73,7 +78,7 @@ class AddFeedFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         })
         swipeRefreshLayout.post(Runnable {
             swipeRefreshLayout.setRefreshing(true)
-            viewModel.getTopPodcastList()
+            viewModel.getTopPodcastList(searchType)
         })
 //        swipeRefreshLayout.setEnabled(false);//设置为不能刷新
     }
@@ -96,7 +101,7 @@ class AddFeedFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         val searchManager = context!!.getSystemService(Context.SEARCH_SERVICE) as SearchManager
         searchMenuItem = menu.findItem(R.id.search)
         (searchMenuItem!!.actionView as SearchView).apply {
-            setSearchableInfo(searchManager.getSearchableInfo(this@AddFeedFragment.activity!!.componentName))
+            setSearchableInfo(searchManager.getSearchableInfo(this@FeedDiscoveryFragment.activity!!.componentName))
             isSubmitButtonEnabled = false
             queryHint = getString(R.string.search)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -150,7 +155,11 @@ class AddFeedFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         if (entry.feedUrl == null) {
             return
         }
-        val intent = PodcastDetailActivity.newIntent(this.context, entry)
-        startActivity(intent)
+//        val intent = PodcastDetailActivity.newIntent(this.context, entry.feedUrl)
+//        startActivity(intent)
+        var bundle : Bundle = Bundle()
+        bundle.putString("feed_url", entry.feedUrl!!)
+        bundle.putString("feed_cover_url", entry.imageUrl!!)
+        NavHostFragment.findNavController(this).navigate(R.id.onlineFeedViewFragment, bundle)
     }
 }

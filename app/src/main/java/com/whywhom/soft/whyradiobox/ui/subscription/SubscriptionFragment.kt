@@ -3,20 +3,18 @@ package com.whywhom.soft.whyradiobox.ui.subscription
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Parcel
-import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.adapter.SubscriptionAdapter
 import com.whywhom.soft.whyradiobox.data.source.local.Podcast
-import com.whywhom.soft.whyradiobox.ui.add.AddFeedActivity
-import com.whywhom.soft.whyradiobox.ui.add.AddFeedFragment
+import com.whywhom.soft.whyradiobox.ui.subscribedetail.SubscribeDetailActivity
 import kotlinx.android.synthetic.main.fragment_subscription.*
 
 class SubscriptionFragment() : Fragment(), SubscriptionAdapter.ItemClickListenter {
@@ -50,15 +48,18 @@ class SubscriptionFragment() : Fragment(), SubscriptionAdapter.ItemClickListente
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(SubscriptionViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SubscriptionViewModel::class.java)
         // TODO: Use the ViewModel
         subscriptions_add.setOnClickListener { onClick->
             run {
-                val intent = AddFeedActivity.newIntent(this.context)
-                startActivity(intent)
+//                val intent = FeedDiscoveryActivity.newIntent(
+//                    this.context,
+//                    FeedDiscoveryActivity.TYPE_EN
+//                )
+//                startActivity(intent)
             }
         }
-        viewModel.podcastlLiveData.observe(this, Observer{
+        viewModel.podcastlLiveData.observe(viewLifecycleOwner, Observer{
             val adapter = SubscriptionAdapter(this.context!!, viewModel.getSubscriptionData().value!!)
             adapter.setOnItemClick(this)
             subscribe_list.adapter = adapter
@@ -81,7 +82,12 @@ class SubscriptionFragment() : Fragment(), SubscriptionAdapter.ItemClickListente
     }
 
     override fun onItemClicked(position: Int) {
-
+        var podlist = viewModel.getSubscriptionData().value
+        if(podlist != null) {
+            var podcast = podlist!!.get(position)
+            val intent = SubscribeDetailActivity.newIntent(this.context, podcast.url)
+            startActivity(intent)
+        }
     }
 
 }

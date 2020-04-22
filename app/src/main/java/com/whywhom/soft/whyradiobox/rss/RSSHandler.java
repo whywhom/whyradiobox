@@ -211,6 +211,7 @@ class RSSHandler extends org.xml.sax.helpers.DefaultHandler {
             }
         }
     };
+
   /**
    * Setter for one or multiple RSS &lt;category&gt; elements inside a
    * &lt;channel&gt; or an &lt;item&gt; element. The title of the RSS feed is

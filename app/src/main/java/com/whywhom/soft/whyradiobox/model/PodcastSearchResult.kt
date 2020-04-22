@@ -8,25 +8,13 @@ import org.json.JSONObject
  */
 
 data class PodcastSearchResult (
-    /**
-     * The name of the podcast
-     */
     val title: String? = null,
-    /**
-     * URL of the podcast image
-     */
     val imageUrl: String? = null,
-    /**
-     * URL of the podcast feed
-     */
-    val feedUrl: String? = null
+    val feedUrl: String? = null,
+    val author: String? = null
 ){
 
     companion object {
-        fun dummy(): PodcastSearchResult? {
-            return PodcastSearchResult("", "", "")
-        }
-
         /**
          * Constructs a Podcast instance from a iTunes search result
          *
@@ -37,7 +25,8 @@ data class PodcastSearchResult (
             val title = json.optString("collectionName", "")
             val imageUrl = json.optString("artworkUrl100", null)
             val feedUrl = json.optString("feedUrl", null)
-            return PodcastSearchResult(title, imageUrl, feedUrl)
+            val author = json.optString("artistName", null)
+            return PodcastSearchResult(title, imageUrl, feedUrl, author)
         }
 
         /**
@@ -62,7 +51,13 @@ data class PodcastSearchResult (
             }
             val feedUrl = "https://itunes.apple.com/lookup?id=" +
                     json.getJSONObject("id").getJSONObject("attributes").getString("im:id")
-            return PodcastSearchResult(title, imageUrl, feedUrl)
+            var author: String? = null
+            try {
+                author = json.getJSONObject("im:artist").getString("label")
+            } catch (e: Exception) {
+                // Some feeds have empty artist
+            }
+            return PodcastSearchResult(title, imageUrl, feedUrl, author)
         }
     }
 

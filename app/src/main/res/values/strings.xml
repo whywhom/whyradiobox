@@ -2,6 +2,7 @@
     <string name="app_name">RadioBox</string>
     <string name="search">Search</string>
     <string name="title_activity_podcast_detail">PodcastDetailActivity</string>
+    <string name="home">home</string>
     <string name="episodes">Episodes</string>
     <string name="action_settings">Settings</string>
     <string name="subscribe">Subscriptions</string>
@@ -13,5 +14,18 @@
     <string name="add_feed">Add Podcast</string>
     <string name="playback">playback</string>
     <string name="add_podcast">Add Podcast</string>
+    <string name="btn_view">View</string>
+    <string name="title_activity_main_drawer">MainDrawerActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
 
+    <string name="top_en">Podcast top 50 (English)</string>
+    <string name="top_cn">Podcast top 50 (中文)</string>
+    <string name="search_podcast_hint">Search podcast…</string>
+    <string name="search_itunes_label">Search iTunes</string>
+    <string name="discover">Discover</string>
+    <string name="discover_more">more »</string>
 </resources>

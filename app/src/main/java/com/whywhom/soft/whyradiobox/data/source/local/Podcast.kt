@@ -27,6 +27,9 @@ data class Podcast @JvmOverloads constructor(
     @ColumnInfo(name = "url")
     var url: String = ""
 
+    @ColumnInfo(name = "rssurl")
+    var rssurl: String = ""
+
     @ColumnInfo(name = "filepath")
     var filepath: String = ""
 

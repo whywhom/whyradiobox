@@ -24,20 +24,29 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONException
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 
-class RssDetailViewModel : ViewModel() {
+class OnlineFeedViewModel : ViewModel() {
+    private val RSS_UNSUB: Int = 0;
+    private val RSS_SUB: Int = 1;
+    private var RSS_STATE:Int = RSS_UNSUB;
     private lateinit var feed: RbFeed
     private var podcast = Podcast()
     var feedUrlLiveData = MutableLiveData<RSSFeed>()
 
-    fun getItemFeedUrl(podcastSearchResult: PodcastSearchResult) {
-        if (!podcastSearchResult.feedUrl!!.contains("itunes.apple.com")) {
+    fun getItemFeedUrl(feedUrl: String) {
+        var feedUrlLocl = feedUrl
+        if (feedUrl.contains("subscribeonandroid.com")) {
+            feedUrlLocl = feedUrl.replaceFirst("((www.)?(subscribeonandroid.com/))", "");
+        }
+        if (!feedUrlLocl!!.contains("itunes.apple.com")) {
+            //从搜索的链接获取podcast的真正feedurl
             var disposable = Observable.create(ObservableOnSubscribe<RSSFeed> (){
-                if (podcastSearchResult.feedUrl != null) {
-                    podcast.url = podcastSearchResult.feedUrl
+                if (feedUrl != null) {
+                    podcast.url = feedUrl
                     val reader = RSSReader()
-                    val rssFeed = reader.load(podcastSearchResult.feedUrl)
+                    val rssFeed = reader.load(feedUrl)
                     it.onNext(rssFeed)
                 }
             }).subscribeOn(Schedulers.io())
@@ -45,25 +54,23 @@ class RssDetailViewModel : ViewModel() {
                 .subscribe({
                     podcast.title = it.title
                     podcast.description = it.description
-                    podcast.coverurl = podcastSearchResult.imageUrl!!
+//                    podcast.coverurl = podcastSearchResult.imageUrl!!
                     feedUrlLiveData.postValue(it)
 
                 }, {
                     Log.e("PodcastDetailViewModel", it.message.toString())
                 })
         } else {
-            parseFeedUrl(podcastSearchResult)
+            parseItunesFeedUrl(feedUrl)
         }
     }
 
-    private fun parseFeedUrl(podcastSearchResult: PodcastSearchResult) {
-
+    private fun parseItunesFeedUrl(feedUrl: String) {
         var disposable = Observable.create(ObservableOnSubscribe<RSSFeed> (){
             var logging = HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             var client = OkHttpClient.Builder().addInterceptor(logging).build();
-            val httpReq = Request.Builder()
-                .url(podcastSearchResult.feedUrl)
+            val httpReq = Request.Builder().url(feedUrl)
                 .header("User-Agent", RBConfig.USER_AGENT)
             val response = client.newCall(httpReq.build()).execute()
             if (response.isSuccessful) {
@@ -78,10 +85,11 @@ class RssDetailViewModel : ViewModel() {
                         val reader = RSSReader()
                         val rssFeed = reader.load(feedUrl)
                         podcast.coverurl = feed.results[0].artworkUrl60!!
-                        podcast.url = feed.results[0].feedUrl!!
+                        podcast.rssurl = feed.results[0].feedUrl!!
                         podcast.title = feed.results[0].artistName
                         podcast.id = Integer.toString(feed.results[0].trackId)
                         podcast.description = rssFeed.description
+                        podcast.url = rssFeed.link.toString();
                         it.onNext(rssFeed)
                     } else{
                         it.onError(NullPointerException())
@@ -94,7 +102,8 @@ class RssDetailViewModel : ViewModel() {
                 Log.e("PodcastDetailViewModel", prefix + it)
                 it.onError(Exception())
             }
-        }).subscribeOn(Schedulers.io())
+        }).debounce(500, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 if (it != null) {
@@ -125,10 +134,35 @@ class RssDetailViewModel : ViewModel() {
         }.start()
     }
 
-    fun subscription(context: Context) {
+    fun subscription(context: Context, rssInterface: RssInterface) {
         Thread {
             var dataBase = PodcastDatabase.getInstance(context!!)
             dataBase.podcastDao().updatePodcast(podcast)
+            rssInterface.onSubscriptionSuccess(true)
         }.start()
+    }
+
+    fun checkSubscription(context: Context, rssFeed: RSSFeed, lintener:RssInterface) {
+        Thread {
+            var dataBase = PodcastDatabase.getInstance(context!!)
+            var podcastList = dataBase.podcastDao().getAll();
+            var isSubscriped = false;
+            for(rss in podcastList){
+                if(rss.url.equals(rssFeed.link.toString())){
+                    isSubscriped = true;
+                    break;
+                }
+            }
+            lintener.isSubscripted(isSubscriped)
+        }.start()
+    }
+
+    fun getRss(): Podcast {
+        return podcast
+    }
+
+    interface RssInterface{
+        fun isSubscripted(it:Boolean)
+        fun onSubscriptionSuccess(it:Boolean)
     }
 }

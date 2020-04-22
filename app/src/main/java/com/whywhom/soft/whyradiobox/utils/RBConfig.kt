@@ -7,5 +7,5 @@ import com.whywhom.soft.whyradiobox.BuildConfig
  */
 
 object RBConfig{
-    val USER_AGENT: String = "AntennaPod/" + BuildConfig.VERSION_NAME;
+    val USER_AGENT: String = "WhyRadioBox/" + BuildConfig.VERSION_NAME;
 }
