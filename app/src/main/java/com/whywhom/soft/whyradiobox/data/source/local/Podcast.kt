@@ -10,10 +10,15 @@ import java.util.*
 @Entity(tableName = "podcast")
 @TypeConverters(Converters::class)
 data class Podcast @JvmOverloads constructor(
-    @PrimaryKey @ColumnInfo(name = "entryid") var id: String = UUID.randomUUID().toString()
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "entryid")
+    var id: Int
 ) {
     @ColumnInfo(name = "title")
     var title: String = ""
+
+    @ColumnInfo(name = "trackid")
+    var trackId: String = ""
 
     @ColumnInfo(name = "description")
     var description: String = ""
@@ -29,6 +34,9 @@ data class Podcast @JvmOverloads constructor(
 
     @ColumnInfo(name = "rssurl")
     var rssurl: String = ""
+
+    @ColumnInfo(name = "rsstag")
+    var rsstag: String = ""
 
     @ColumnInfo(name = "filepath")
     var filepath: String = ""

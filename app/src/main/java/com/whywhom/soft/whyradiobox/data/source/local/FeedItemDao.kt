@@ -5,13 +5,13 @@ import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
-interface PodcastDao {
-    @Query("SELECT * FROM podcast")
-    fun getAll(): List<Podcast>
+interface FeedItemDao {
+    @Query("SELECT * FROM feeditem")
+    fun getAll(): List<FeedItem>
 
     /**
-     * add Podcast
+     * add FeedItem
      */
     @Insert
-    fun updatePodcast(podcast: Podcast)
+    fun updateFeedItem(feedItem: FeedItem)
 }

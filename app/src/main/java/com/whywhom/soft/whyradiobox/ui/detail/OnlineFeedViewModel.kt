@@ -1,6 +1,5 @@
 package com.whywhom.soft.whyradiobox.ui.detail
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -9,21 +8,17 @@ import com.google.gson.Gson
 import com.whywhom.soft.whyradiobox.data.RbFeed
 import com.whywhom.soft.whyradiobox.data.source.local.Podcast
 import com.whywhom.soft.whyradiobox.data.source.local.PodcastDatabase
-import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
+import com.whywhom.soft.whyradiobox.extensions.generateFileName
 import com.whywhom.soft.whyradiobox.rss.RSSFeed
 import com.whywhom.soft.whyradiobox.rss.RSSReader
 import com.whywhom.soft.whyradiobox.utils.RBConfig
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
-import org.json.JSONException
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 
@@ -32,7 +27,7 @@ class OnlineFeedViewModel : ViewModel() {
     private val RSS_SUB: Int = 1;
     private var RSS_STATE:Int = RSS_UNSUB;
     private lateinit var feed: RbFeed
-    private var podcast = Podcast()
+    private var podcast = Podcast(0)
     var feedUrlLiveData = MutableLiveData<RSSFeed>()
 
     fun getItemFeedUrl(feedUrl: String) {
@@ -86,8 +81,9 @@ class OnlineFeedViewModel : ViewModel() {
                         val rssFeed = reader.load(feedUrl)
                         podcast.coverurl = feed.results[0].artworkUrl60!!
                         podcast.rssurl = feed.results[0].feedUrl!!
+                        podcast.rsstag = generateFileName(podcast.rssurl)
                         podcast.title = feed.results[0].artistName
-                        podcast.id = Integer.toString(feed.results[0].trackId)
+                        podcast.trackId = Integer.toString(feed.results[0].trackId)
                         podcast.description = rssFeed.description
                         podcast.url = rssFeed.link.toString();
                         it.onNext(rssFeed)

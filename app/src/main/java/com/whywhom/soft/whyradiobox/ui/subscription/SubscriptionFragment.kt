@@ -1,6 +1,5 @@
 package com.whywhom.soft.whyradiobox.ui.subscription
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Parcel
 import androidx.fragment.app.Fragment
@@ -85,7 +84,7 @@ class SubscriptionFragment() : Fragment(), SubscriptionAdapter.ItemClickListente
         var podlist = viewModel.getSubscriptionData().value
         if(podlist != null) {
             var podcast = podlist!!.get(position)
-            val intent = SubscribeDetailActivity.newIntent(this.context, podcast.url)
+            val intent = SubscribeDetailActivity.newIntent(this.context, podcast.rssurl, podcast.coverurl, podcast.trackId)
             startActivity(intent)
         }
     }

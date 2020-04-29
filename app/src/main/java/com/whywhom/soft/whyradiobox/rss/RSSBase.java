@@ -31,6 +31,7 @@ abstract class RSSBase {
   private java.util.List<String> categories;
   private java.util.Date pubdate;
   private String author;
+  private String duration;
   /**
    * Specify initial capacity for the List which contains the category names.
    */
@@ -89,6 +90,10 @@ abstract class RSSBase {
   public void setAuthor(String author) { this.author = author;}
 
   public String getAuthor(String author) { return this.author;}
+
+  public void setDuration(String duration) { this.author = duration;}
+
+  public String getDuration() { return this.duration;}
   /**
    * Returns the title.
    */

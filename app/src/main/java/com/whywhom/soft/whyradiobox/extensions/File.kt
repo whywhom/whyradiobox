@@ -33,7 +33,7 @@ val validChars = ("abcdefghijklmnopqrstuvwxyz"
         + "0123456789"
         + " _-").toCharArray()
 
-fun getDiskCacheDir(context: Context): String? {
+fun getDiskCacheDir(context: Context): String {
     var cachePath: String? = null
     cachePath = if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
         || !Environment.isExternalStorageRemovable()
@@ -45,7 +45,7 @@ fun getDiskCacheDir(context: Context): String? {
     return cachePath
 }
 
-fun getDiskFileDir(context: Context): String? {
+fun getDiskFileDir(context: Context): String {
     var filePath: String? = null
     filePath = if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
         || !Environment.isExternalStorageRemovable()
@@ -57,7 +57,7 @@ fun getDiskFileDir(context: Context): String? {
     return filePath
 }
 
-fun generateFileName(string: String): String? {
+fun generateFileName(string: String): String {
     val buf = StringBuilder()
     for (i in 0 until string.length) {
         val c = string[i]
@@ -76,7 +76,7 @@ fun generateFileName(string: String): String? {
     } else filename
 }
 
-private fun randomString(length: Int): String? {
+private fun randomString(length: Int): String {
     val sb = java.lang.StringBuilder(length)
     for (i in 0 until length) {
         sb.append(validChars.get((Math.random() * validChars.size) as Int))

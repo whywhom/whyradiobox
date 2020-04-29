@@ -93,10 +93,8 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
         if(feedUrl == null){
             findNavController().popBackStack();
         }
-
         viewModel = ViewModelProvider(this).get(OnlineFeedViewModel::class.java)
         feed_list.layoutManager = LinearLayoutManager(this.context)
-        viewModel = ViewModelProvider(this).get(OnlineFeedViewModel::class.java)
         viewModel.feedUrlLiveData.observe(viewLifecycleOwner, Observer { rssFeed->
             if(rssFeed != null){
                 checkSubscription(rssFeed)
@@ -138,13 +136,9 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
         btn_subscribe.setOnClickListener{
             if(isSubscription){
                 val data = viewModel.getRss()
-                val intent = SubscribeDetailActivity.newIntent(this.context, data.url)
+                val intent = SubscribeDetailActivity.newIntent(this.context, data.rssurl, data.coverurl, data.trackId)
                 startActivity(intent)
                 findNavController().popBackStack()
-//                var bundle : Bundle = Bundle()
-//                val data = viewModel.getRss()
-//                bundle.putString("data_url", data.url)
-//                findNavController().navigate(R.id.subscribeDetailFragment, bundle);
             } else {
                 viewModel.subscription(this.context!!, this)
             }

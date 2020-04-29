@@ -28,4 +28,14 @@
     <string name="search_itunes_label">Search iTunes</string>
     <string name="discover">Discover</string>
     <string name="discover_more">more »</string>
+
+    <string name="time_hours">hours</string>
+    <plurals name="time_hours_quantified">
+        <item quantity="one">1 hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="time_minutes_quantified">
+        <item quantity="one">1 minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
 </resources>

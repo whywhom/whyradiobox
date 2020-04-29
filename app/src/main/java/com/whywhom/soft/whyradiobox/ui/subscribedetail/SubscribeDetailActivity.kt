@@ -10,8 +10,17 @@ class SubscribeDetailActivity : AppCompatActivity() {
 
     companion object{
         private lateinit var url: String
-        fun newIntent(context: Context?, item: String): Intent {
+        private lateinit var coverurl: String
+        private lateinit var trackid: String
+        fun newIntent(
+            context: Context?,
+            item: String,
+            cover: String,
+            trackId: String
+        ): Intent {
             url = item
+            coverurl = cover
+            trackid = trackId
             return Intent(context, SubscribeDetailActivity::class.java)
         }
     }
@@ -20,7 +29,7 @@ class SubscribeDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_subscribedetail)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, SubscribeDetailFragment.newInstance())
+                .replace(R.id.container, SubscribeDetailFragment.newInstance(url, coverurl, trackid))
                 .commitNow()
         }
     }

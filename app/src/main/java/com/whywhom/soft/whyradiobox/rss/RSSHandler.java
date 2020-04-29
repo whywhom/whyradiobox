@@ -212,6 +212,17 @@ class RSSHandler extends org.xml.sax.helpers.DefaultHandler {
         }
     };
 
+    private final Setter SET_DURATION = new ContentSetter() {
+        @Override
+        public void set(String duration) {
+            if (item != null) {
+                item.setDuration(duration);
+            } else{
+                feed.setDuration(duration);
+            }
+        }
+    };
+
   /**
    * Setter for one or multiple RSS &lt;category&gt; elements inside a
    * &lt;channel&gt; or an &lt;item&gt; element. The title of the RSS feed is
@@ -332,6 +343,7 @@ class RSSHandler extends org.xml.sax.helpers.DefaultHandler {
     setters.put("ttl", SET_TTL);
     setters.put("enclosure", SET_ENCLOSURE);
     setters.put("itunes:author", SET_AUTHOR);
+    setters.put("itunes:duration", SET_DURATION);
   }
 
   /**
