@@ -1,8 +1,6 @@
 package com.whywhom.soft.whyradiobox.data.source.local
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface FeedItemDao {
@@ -12,6 +10,13 @@ interface FeedItemDao {
     /**
      * add FeedItem
      */
-    @Insert
-    fun updateFeedItem(feedItem: FeedItem)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertFeedItems(vararg feedItem: FeedItem):List<Long>
+
+    @Query("SELECT * FROM feeditem WHERE belongto = :podInfo")
+    fun loadAllFeedItem(podInfo: String): List<FeedItem>
+
+    @Delete
+    fun deleteFeedItems(vararg feedItem: FeedItem)
+
 }

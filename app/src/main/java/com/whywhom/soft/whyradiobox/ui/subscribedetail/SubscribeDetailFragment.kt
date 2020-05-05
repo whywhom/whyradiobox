@@ -16,6 +16,7 @@ import com.whywhom.soft.whyradiobox.adapter.SubscriptionListAdapter
 import com.whywhom.soft.whyradiobox.data.source.local.FeedItem
 import com.whywhom.soft.whyradiobox.extensions.generateFileName
 import com.whywhom.soft.whyradiobox.extensions.getDiskCacheDir
+import com.whywhom.soft.whyradiobox.extensions.getFileNameWithSuffix
 import com.whywhom.soft.whyradiobox.interfaces.OnPlayListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.rss.RSSFeed
@@ -24,7 +25,7 @@ import java.text.SimpleDateFormat
 
 class SubscribeDetailFragment : Fragment(), OnPlayListener,SubscribeDetailViewModel.SubscribeDetailInterface {
 
-    private lateinit var feedItemList: ArrayList<FeedItem>
+    private var feedItemList: ArrayList<FeedItem> = ArrayList<FeedItem>()
     private var showMore:Boolean = false
     private var player: SimpleExoPlayer? = null
     private var isSubscription = false;
@@ -65,6 +66,13 @@ class SubscribeDetailFragment : Fragment(), OnPlayListener,SubscribeDetailViewMo
             }
             swipeRefreshLayout.setRefreshing(false);
         })
+        viewModel.feedItemLiveData.observe(viewLifecycleOwner, Observer { feedList->
+            if(feedList != null){
+                var feedListAdapter = SubscriptionListAdapter(this.context!!, feedItemList)
+                feedListAdapter.setOnPlayListener(this)
+                feed_list.adapter = feedListAdapter
+            }
+        })
         swipeRefreshLayout.post(Runnable {
             swipeRefreshLayout.setRefreshing(true)
             viewModel.getItemFeedUrl(feedUrl!!)
@@ -85,19 +93,18 @@ class SubscribeDetailFragment : Fragment(), OnPlayListener,SubscribeDetailViewMo
             var feedItem = FeedItem(0)
             feedItem.downloadUrl = i.enclosure.url.toString()
             feedItem.belongto = generateFileName(feedUrl)
-            feedItem.duration = i.getDuration()
+            feedItem.duration = if(i.duration==null)"" else i.duration
             feedItem.length = i.enclosure.length
             feedItem.mediaType = i.enclosure.mimeType
             val formatter = SimpleDateFormat("yyyy-MM-dd")
             feedItem.pubData = formatter.format(i.pubDate)
             feedItem.title = i.title
             feedItem.trackId = trackId
-            feedItem.filepath = generateCacheFileName(i.link.toString())
+            feedItem.filename = getFileNameWithSuffix(feedItem.downloadUrl)
+            feedItem.filepath = generateCacheFileName(feedItem.filename)
             feedItemList.add(feedItem)
         }
-        var feedListAdapter = SubscriptionListAdapter(this.context!!, feedItemList)
-        feedListAdapter.setOnPlayListener(this)
-        feed_list.adapter = feedListAdapter
+        viewModel.writeFeedItemToDB(this.context!!,feedItemList,generateFileName(feedUrl));
     }
 
     private fun generateCacheFileName(feedurl: String): String {

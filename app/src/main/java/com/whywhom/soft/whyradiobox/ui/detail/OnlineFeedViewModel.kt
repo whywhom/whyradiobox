@@ -79,7 +79,7 @@ class OnlineFeedViewModel : ViewModel() {
                     if (feedUrl != null) {
                         val reader = RSSReader()
                         val rssFeed = reader.load(feedUrl)
-                        podcast.coverurl = feed.results[0].artworkUrl60!!
+                        podcast.coverurl = feed.results[0].artworkUrl100!!
                         podcast.rssurl = feed.results[0].feedUrl!!
                         podcast.rsstag = generateFileName(podcast.rssurl)
                         podcast.title = feed.results[0].artistName

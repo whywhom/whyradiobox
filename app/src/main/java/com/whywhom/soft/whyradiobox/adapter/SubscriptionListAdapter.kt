@@ -18,7 +18,6 @@ import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_DOWNLOADING
 import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_PAUSE
 import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_PLAYING
 import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_UNDOWNLOAD
-import java.text.SimpleDateFormat
 
 /**
  * Created by wuhaoyong on 2020-02-10.
@@ -67,7 +66,7 @@ class SubscriptionListAdapter(val mContext: Context, val rssList: ArrayList<Feed
         init {
             cardView = view.findViewById(R.id.card_view) as CardView
             titleView = view.findViewById(R.id.item_title) as TextView
-            dateView = view.findViewById(R.id.item_data)
+            dateView = view.findViewById(R.id.item_date)
             itemControl = view.findViewById(R.id.item_control) as ImageView
             itemSize = view.findViewById(R.id.item_size) as TextView
             itemListener = view.findViewById(R.id.item_listener) as ImageView

@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.whywhom.soft.whyradiobox.data.RbFeed
+import com.whywhom.soft.whyradiobox.data.source.local.FeedItem
 import com.whywhom.soft.whyradiobox.data.source.local.Podcast
 import com.whywhom.soft.whyradiobox.data.source.local.PodcastDatabase
 import com.whywhom.soft.whyradiobox.rss.RSSFeed
@@ -15,6 +17,9 @@ import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -27,7 +32,7 @@ class SubscribeDetailViewModel : ViewModel() {
     private lateinit var feed: RbFeed
     private var podcast = Podcast(0)
     var feedUrlLiveData = MutableLiveData<RSSFeed>()
-
+    var feedItemLiveData = MutableLiveData<ArrayList<FeedItem>>()
     fun getItemFeedUrl(feedUrl: String) {
         var feedUrlLocl = feedUrl
         if (feedUrl.contains("subscribeonandroid.com")) {
@@ -152,6 +157,34 @@ class SubscribeDetailViewModel : ViewModel() {
 
     fun getRss(): Podcast {
         return podcast
+    }
+
+    fun writeFeedItemToDB(
+        context: Context,
+        feedItemList: ArrayList<FeedItem>,
+        generateFileName: String
+    ) {
+        viewModelScope.launch {
+            val withContext = withContext(Dispatchers.IO) {
+                var feedItemDao = PodcastDatabase.getInstance(context).FeedItemDao()
+                var mutableFeedItems = feedItemDao.loadAllFeedItem(generateFileName)
+                for (feed in feedItemList) {
+                    var isSame = false;
+                    for(feedInDB in mutableFeedItems){
+                        if(feed.title == feedInDB.title){
+                            isSame = true
+                            break
+                        }
+                    }
+                    if(!isSame) {
+                        var rowId = feedItemDao.insertFeedItems(feed)
+                        Log.d("SubscribeDetail", "rowId = " + rowId)
+                    }
+                }
+                mutableFeedItems = feedItemDao.loadAllFeedItem(generateFileName)
+                feedItemLiveData.postValue(ArrayList(mutableFeedItems));
+            }
+        }
     }
 
     interface SubscribeDetailInterface{

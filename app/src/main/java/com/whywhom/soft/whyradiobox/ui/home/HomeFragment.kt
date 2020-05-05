@@ -13,9 +13,9 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class HomeFragment : Fragment() {
-
     var podcastList:ArrayList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
     companion object {
+        val MAX_TOPLIST = 100
         val TAG: String = "HomeFragment"
 
         fun newInstance() = HomeFragment()

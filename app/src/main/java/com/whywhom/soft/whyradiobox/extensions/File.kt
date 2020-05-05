@@ -83,3 +83,18 @@ private fun randomString(length: Int): String {
     }
     return sb.toString()
 }
+
+/**
+ * 获取文件名及后缀
+ */
+fun getFileNameWithSuffix(path: String): String {
+    if (TextUtils.isEmpty(path)) {
+        return ""
+    }
+    val start = path.lastIndexOf("/")
+    return if (start != -1) {
+        path.substring(start + 1)
+    } else {
+        ""
+    }
+}

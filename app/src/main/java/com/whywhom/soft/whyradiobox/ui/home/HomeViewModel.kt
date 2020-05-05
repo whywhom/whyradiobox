@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.whywhom.soft.whyradiobox.data.NetworkModule
 import com.whywhom.soft.whyradiobox.model.ItunesPodcastSearcher
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
+import com.whywhom.soft.whyradiobox.ui.home.HomeFragment.Companion.MAX_TOPLIST
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
@@ -22,7 +23,7 @@ class HomeViewModel : ViewModel() {
         var country: String = Locale.getDefault().getCountry().decapitalize()
         podcastList.clear()
         NetworkModule.provideRetrofitService()
-            .getTopList(country,"50").enqueue(
+            .getTopList(country, MAX_TOPLIST.toString()).enqueue(
                 object : retrofit2.Callback<ResponseBody> {
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                         var throwable = t

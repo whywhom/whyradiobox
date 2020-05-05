@@ -36,6 +36,9 @@ data class FeedItem @JvmOverloads constructor(
     @ColumnInfo(name = "duration")
     var duration: String = ""
 
+    @ColumnInfo(name = "filename")
+    var filename: String = ""
+
     @ColumnInfo(name = "filepath")
     var filepath: String = ""
 

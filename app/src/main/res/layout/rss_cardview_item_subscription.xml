@@ -46,32 +46,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_title"
-                android:textColor="@android:color/holo_blue_dark"/>
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="@dimen/item_size_small"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/item_data"
-                android:textColor="@android:color/holo_blue_dark"/>
+                android:id="@+id/item_date"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/item_size_smaller"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/item_listener"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:contentDescription="@string/app_name"
-                    android:padding="8dp"
+                    android:padding="4dp"
                     android:src="@drawable/listen_48px"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@id/item_listener"
                     android:layout_centerVertical="true"
-                    android:textColor="@android:color/holo_blue_dark"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="@dimen/item_size_smaller"
                     android:id="@+id/item_size"/>
 
             </RelativeLayout>
