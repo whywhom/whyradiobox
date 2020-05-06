@@ -17,13 +17,15 @@ import com.whywhom.soft.whyradiobox.data.source.local.FeedItem
 import com.whywhom.soft.whyradiobox.extensions.generateFileName
 import com.whywhom.soft.whyradiobox.extensions.getDiskCacheDir
 import com.whywhom.soft.whyradiobox.extensions.getFileNameWithSuffix
-import com.whywhom.soft.whyradiobox.interfaces.OnPlayListener
+import com.whywhom.soft.whyradiobox.interfaces.OnItemClickListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.rss.RSSFeed
+import com.whywhom.soft.whyradiobox.utils.Constants
+import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_UNDOWNLOAD
 import kotlinx.android.synthetic.main.fragment_subscribedetail.*
 import java.text.SimpleDateFormat
 
-class SubscribeDetailFragment : Fragment(), OnPlayListener,SubscribeDetailViewModel.SubscribeDetailInterface {
+class SubscribeDetailFragment : Fragment(), OnItemClickListener, SubscribeDetailViewModel.SubscribeDetailInterface {
 
     private var feedItemList: ArrayList<FeedItem> = ArrayList<FeedItem>()
     private var showMore:Boolean = false
@@ -68,8 +70,9 @@ class SubscribeDetailFragment : Fragment(), OnPlayListener,SubscribeDetailViewMo
         })
         viewModel.feedItemLiveData.observe(viewLifecycleOwner, Observer { feedList->
             if(feedList != null){
+                feedItemList = feedList
                 var feedListAdapter = SubscriptionListAdapter(this.context!!, feedItemList)
-                feedListAdapter.setOnPlayListener(this)
+                feedListAdapter.setOnItemClickListener(this)
                 feed_list.adapter = feedListAdapter
             }
         })
@@ -100,6 +103,7 @@ class SubscribeDetailFragment : Fragment(), OnPlayListener,SubscribeDetailViewMo
             feedItem.pubData = formatter.format(i.pubDate)
             feedItem.title = i.title
             feedItem.trackId = trackId
+            feedItem.controlType = CONTROL_TYPE_UNDOWNLOAD
             feedItem.filename = getFileNameWithSuffix(feedItem.downloadUrl)
             feedItem.filepath = generateCacheFileName(feedItem.filename)
             feedItemList.add(feedItem)
@@ -136,16 +140,17 @@ class SubscribeDetailFragment : Fragment(), OnPlayListener,SubscribeDetailViewMo
             .centerCrop()
             .into(imgvCover)
     }
-    override fun isSubscripted(it: Boolean) {
 
-    }
-
-    override fun onSubscriptionSuccess(it: Boolean) {
-
-    }
-
-    override fun play(position: Int) {
-        TODO("Not yet implemented")
+    override fun onItemClick(position: Int) {
+        var itemData = feedItemList.get(position)
+        when(itemData.controlType) {
+            CONTROL_TYPE_UNDOWNLOAD->println("UNDOWNLOAD")
+            Constants.CONTROL_TYPE_DOWNLOAD ->println("DOWNLOAD")
+            Constants.CONTROL_TYPE_DOWNLOADING ->println("DOWNLOADING")
+            Constants.CONTROL_TYPE_DOWNLOADED ->println("DOWNLOADED")
+            Constants.CONTROL_TYPE_PLAYING ->println("PLAYING")
+            Constants.CONTROL_TYPE_PAUSE ->println("PAUSE")
+        }
     }
 
 }

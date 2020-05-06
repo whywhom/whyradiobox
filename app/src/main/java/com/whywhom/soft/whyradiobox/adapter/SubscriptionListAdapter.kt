@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.data.source.local.FeedItem
+import com.whywhom.soft.whyradiobox.interfaces.OnItemClickListener
 import com.whywhom.soft.whyradiobox.interfaces.OnPlayListener
 import com.whywhom.soft.whyradiobox.utils.Constants
 import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_DOWNLOAD
@@ -23,7 +24,7 @@ import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_UNDOWNLOAD
  * Created by wuhaoyong on 2020-02-10.
  */
 class SubscriptionListAdapter(val mContext: Context, val rssList: ArrayList<FeedItem>) : RecyclerView.Adapter<SubscriptionListAdapter.PodcastViewHolder>() {
-    private lateinit var playListerer: OnPlayListener
+    private lateinit var itemClickListerer: OnItemClickListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PodcastViewHolder {
         return PodcastViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.rss_cardview_item_subscription,parent,false))
@@ -33,9 +34,6 @@ class SubscriptionListAdapter(val mContext: Context, val rssList: ArrayList<Feed
         return rssList.count()
     }
 
-    fun setOnPlayListener(listener:OnPlayListener){
-        playListerer = listener
-    }
     override fun onBindViewHolder(holder: PodcastViewHolder, position: Int) {
         val itemData = rssList[position]
         holder.titleView.setText(itemData.title)
@@ -44,15 +42,12 @@ class SubscriptionListAdapter(val mContext: Context, val rssList: ArrayList<Feed
         holder.dateView.text = itemData.pubData
         holder.itemSize.text = Constants.getFileSize(itemData.length.toLong())
         holder.itemControl.setOnClickListener(View.OnClickListener {
-            when(itemData.controlType) {
-                CONTROL_TYPE_UNDOWNLOAD->println("UNDOWNLOAD")
-                CONTROL_TYPE_DOWNLOAD->println("DOWNLOAD")
-                CONTROL_TYPE_DOWNLOADING->println("DOWNLOADING")
-                CONTROL_TYPE_DOWNLOADED->playListerer.play(position)
-                CONTROL_TYPE_PLAYING->println("PLAYING")
-                CONTROL_TYPE_PAUSE->println("PAUSE")
-            }
+            itemClickListerer.onItemClick(position)
         })
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.itemClickListerer = listener
     }
 
 

@@ -41,11 +41,13 @@ class HomeFragment : Fragment() {
         top_en.setOnClickListener { onClick->
             var bundle : Bundle = Bundle()
             bundle.putInt("search_type", FeedDiscoveryFragment.TYPE_EN)
+            bundle.putString("search_title", top_en.text.toString())
             findNavController(this).navigate(R.id.feedDiscoveryFragment, bundle)
         }
         top_cn.setOnClickListener { onClick->
             var bundle : Bundle = Bundle()
             bundle.putInt("search_type", FeedDiscoveryFragment.TYPE_CN)
+            bundle.putString("search_title", top_cn.text.toString())
             findNavController(this).navigate(R.id.feedDiscoveryFragment, bundle)
         }
     }
@@ -59,6 +61,7 @@ class HomeFragment : Fragment() {
         when(item.itemId){
             R.id.search->{
                 Log.d("MainFragment" ,"click search")
+                findNavController(this).navigate(R.id.onlineSearchFragment)
             }
         }
         return super.onOptionsItemSelected(item)

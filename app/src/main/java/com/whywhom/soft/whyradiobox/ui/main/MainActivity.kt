@@ -23,8 +23,6 @@ import com.whywhom.soft.whyradiobox.ui.subscription.SubscriptionFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var menuItem: MenuItem
-    private lateinit var fragment: Fragment
 
     val NAV_TAGS = arrayOf<String>(
         SubscriptionFragment.TAG,//订阅信息
@@ -61,5 +59,10 @@ class MainActivity : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main_drawer, menu)
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu!!.findItem(R.id.action_settings).isVisible = false
+        return super.onPrepareOptionsMenu(menu)
     }
 }

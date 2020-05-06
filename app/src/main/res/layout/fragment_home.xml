@@ -6,49 +6,53 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="4dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        app:cardCornerRadius="30dp"-->
+<!--        app:cardElevation="4dp"-->
+<!--        android:layout_marginLeft="8dp"-->
+<!--        android:layout_marginRight="8dp">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal">-->
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:contentDescription="@string/search_podcast_hint"
-                android:src="@android:drawable/ic_menu_search"
-                android:id="@+id/search_icon"
-                android:scaleType="center"/>
+<!--            <ImageView-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginLeft="8dp"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                android:contentDescription="@string/search_podcast_hint"-->
+<!--                android:src="@android:drawable/ic_menu_search"-->
+<!--                android:id="@+id/search_icon"-->
+<!--                android:scaleType="center"/>-->
 
-            <EditText
-                android:id="@+id/combinedFeedSearchBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="text"
-                android:imeOptions="actionSearch"
-                android:importantForAutofill="no"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="8dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:hint="@string/search_podcast_hint"
-                android:background="@null"/>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+<!--            <EditText-->
+<!--                android:id="@+id/combinedFeedSearchBox"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:inputType="text"-->
+<!--                android:imeOptions="actionSearch"-->
+<!--                android:importantForAutofill="no"-->
+<!--                android:layout_marginStart="0dp"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                android:paddingTop="16dp"-->
+<!--                android:paddingBottom="16dp"-->
+<!--                android:textSize="@dimen/item_size_small"-->
+<!--                android:hint="@string/search_podcast_hint"-->
+<!--                android:focusable="false"-->
+<!--                android:background="@null"/>-->
+<!--        </LinearLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="5dp"
         android:layout_weight="1"
         android:scrollbars="vertical">
 
@@ -76,19 +80,6 @@
                 android:paddingBottom="8dp"
                 android:clickable="true"
                 android:text="@string/top_cn"/>
-
-            <TextView
-                android:id="@+id/btn_search_itunes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawablePadding="8dp"
-                android:drawableStart="@android:drawable/ic_menu_search"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:textColor="?android:attr/textColorPrimary"
-                android:clickable="true"
-                android:text="@string/search_itunes_label"/>
 
         </LinearLayout>
     </ScrollView>

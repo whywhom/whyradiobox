@@ -25,7 +25,8 @@
         <activity android:name=".ui.subscribedetail.SubscribeDetailActivity" />
         <activity
             android:name=".ui.detail.PodcastDetailActivity"
-            android:label="@string/title_activity_podcast_detail" />
+            android:label="@string/title_activity_podcast_detail"
+            />
         <activity
             android:name=".ui.home.HomeActivity"
             android:label="@string/app_name" />

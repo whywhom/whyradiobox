@@ -116,48 +116,17 @@ class SubscribeDetailViewModel : ViewModel() {
 
     }
 
-    fun readPodcastFromDB() {
-        Thread {
-//            podcastDbList = DbData.podcastDbList
-//            if (podcastDbList != null) {
-//                var count = podcastDbList.size
-////                var itemList:ArrayList<Podcast> = ArrayList(0)
-//                podcastList.clear()
-//                for(podcast in podcastDbList){
-//                    var podcastItem:Podcast = Podcast.fromDb(podcast)
-//                    podcastList.add(podcastItem)
-//                }
-//                podcastLists.postValue(podcastList)
-//            }
-        }.start()
-    }
+//    fun subscription(context: Context, rssInterface: SubscribeDetailInterface) {
+//        Thread {
+//            var dataBase = PodcastDatabase.getInstance(context!!)
+//            dataBase.podcastDao().updatePodcast(podcast)
+//            rssInterface.onSubscriptionSuccess(true)
+//        }.start()
+//    }
 
-    fun subscription(context: Context, rssInterface: SubscribeDetailInterface) {
-        Thread {
-            var dataBase = PodcastDatabase.getInstance(context!!)
-            dataBase.podcastDao().updatePodcast(podcast)
-            rssInterface.onSubscriptionSuccess(true)
-        }.start()
-    }
-
-    fun checkSubscription(context: Context, rssFeed: RSSFeed, lintener:SubscribeDetailInterface) {
-        Thread {
-            var dataBase = PodcastDatabase.getInstance(context!!)
-            var podcastList = dataBase.podcastDao().getAll();
-            var isSubscriped = false;
-            for(rss in podcastList){
-                if(rss.url.equals(rssFeed.link.toString())){
-                    isSubscriped = true;
-                    break;
-                }
-            }
-            lintener.isSubscripted(isSubscriped)
-        }.start()
-    }
-
-    fun getRss(): Podcast {
-        return podcast
-    }
+//    fun getRss(): Podcast {
+//        return podcast
+//    }
 
     fun writeFeedItemToDB(
         context: Context,
@@ -188,7 +157,6 @@ class SubscribeDetailViewModel : ViewModel() {
     }
 
     interface SubscribeDetailInterface{
-        fun isSubscripted(it:Boolean)
-        fun onSubscriptionSuccess(it:Boolean)
+
     }
 }

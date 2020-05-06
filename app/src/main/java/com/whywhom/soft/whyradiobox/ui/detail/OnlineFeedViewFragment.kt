@@ -28,6 +28,7 @@ import com.whywhom.soft.whyradiobox.rss.RSSItem
 import com.whywhom.soft.whyradiobox.ui.detail.OnlineFeedViewModel
 import com.whywhom.soft.whyradiobox.ui.subscribedetail.SubscribeDetailActivity
 import com.whywhom.soft.whyradiobox.utils.PlayerUtil
+import kotlinx.android.synthetic.main.app_bar_main_drawer.*
 import kotlinx.android.synthetic.main.fragment_rss_detail.*
 
 
@@ -43,7 +44,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
     companion object {
         private var feedUrl: String? = ""
         private var coverUrl:String? =""
-
+        private var title:String = ""
         fun newInstance(context: Context?, item: String?):OnlineFeedViewFragment{
             feedUrl = item
             return OnlineFeedViewFragment()
@@ -79,6 +80,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
         super.onViewCreated(view, savedInstanceState)
         val bundle = savedInstanceState ?: arguments
         if(bundle != null){
+            title = bundle.getString("title","")
             feedUrl = bundle.getString("feed_url","")
             coverUrl = bundle.getString("feed_cover_url","")
         }
@@ -93,6 +95,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
         if(feedUrl == null){
             findNavController().popBackStack();
         }
+        activity!!.toolbar!!.title = title
         viewModel = ViewModelProvider(this).get(OnlineFeedViewModel::class.java)
         feed_list.layoutManager = LinearLayoutManager(this.context)
         viewModel.feedUrlLiveData.observe(viewLifecycleOwner, Observer { rssFeed->
@@ -136,7 +139,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
         btn_subscribe.setOnClickListener{
             if(isSubscription){
                 val data = viewModel.getRss()
-                val intent = SubscribeDetailActivity.newIntent(this.context, data.rssurl, data.coverurl, data.trackId)
+                val intent = SubscribeDetailActivity.newIntent(this.context, data.title, data.rssurl, data.coverurl, data.trackId)
                 startActivity(intent)
                 findNavController().popBackStack()
             } else {
