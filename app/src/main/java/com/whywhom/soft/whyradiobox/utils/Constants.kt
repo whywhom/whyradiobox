@@ -16,6 +16,8 @@ object Constants{
     const val CONTROL_TYPE_PLAYING:Int = 4
     const val CONTROL_TYPE_PAUSE:Int = 5
 
+    const val DOWNLOAD_NOTIFICATION_CHANNEL_ID: String = "download_channel"
+
     fun getFileSize(size: Long): String? {
         // 如果字节数少于1024，则直接以B为单位，否则先除于1024，后3位因太少无意义
         var value = size.toDouble()

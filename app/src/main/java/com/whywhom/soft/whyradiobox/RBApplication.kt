@@ -9,6 +9,7 @@ import dagger.android.support.DaggerApplication
  * Created by wuhaoyong on 2020-01-10.
  */
 open class RBApplication: DaggerApplication() {
+
     override fun onCreate() {
         super.onCreate()
     }

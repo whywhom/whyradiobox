@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat
  */
 class FeedListAdapter(val mContext: Context, val rssList: ArrayList<RSSItem>) : RecyclerView.Adapter<FeedListAdapter.PodcastViewHolder>() {
     private lateinit var playListerer: OnPlayListener
+    private var isPlaying = false
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PodcastViewHolder {
         return PodcastViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.rss_cardview_item,parent,false))
@@ -38,7 +39,13 @@ class FeedListAdapter(val mContext: Context, val rssList: ArrayList<RSSItem>) : 
         holder.dateView.text = dateString
         holder.detailView.text = itemData.description
         holder.mediaPlay.setOnClickListener(View.OnClickListener {
-            playListerer.play(position)
+            if(isPlaying){
+                playListerer.pause(position)
+                isPlaying = false
+            } else {
+                playListerer.play(position)
+                isPlaying = true
+            }
         })
     }
 

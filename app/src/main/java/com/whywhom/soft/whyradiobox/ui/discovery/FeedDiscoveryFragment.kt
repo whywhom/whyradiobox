@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.adapter.PodcastListAdapter
@@ -22,10 +23,6 @@ import kotlinx.android.synthetic.main.fragment_add_feed.*
 
 
 class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
-    private var searchMenuItem: MenuItem? = null
-    private var isSearchOpen = false
-    private var skipItemUpdating = false
-    private var lastSearchedText = ""
 
     private var searchType :Int = TYPE_EN;
     private var title :String = "";
@@ -47,7 +44,7 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)//想让Fragment中的onCreateOptionsMenu生效必须先调用setHasOptionsMenu方法，否则Toolbar没有菜单。
+        setHasOptionsMenu(false)//想让Fragment中的onCreateOptionsMenu生效必须先调用setHasOptionsMenu方法，否则Toolbar没有菜单。
         super.onViewCreated(view, savedInstanceState)
         val bundle = savedInstanceState ?: arguments
         if(bundle != null){
@@ -89,69 +86,8 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu, menu)
-        setupSearch(menu)
+//        setupSearch(menu)
         super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.search->{
-                Log.d("MainFragment" ,"click search")
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-    private fun setupSearch(menu: Menu) {
-        val searchManager = context!!.getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        searchMenuItem = menu.findItem(R.id.search)
-        (searchMenuItem!!.actionView as SearchView).apply {
-            setSearchableInfo(searchManager.getSearchableInfo(this@FeedDiscoveryFragment.activity!!.componentName))
-            isSubmitButtonEnabled = false
-            queryHint = getString(R.string.search)
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String) = false
-
-                override fun onQueryTextChange(newText: String): Boolean {
-                    if (isSearchOpen) {
-                        searchQueryChanged(newText)
-                    }
-                    return true
-                }
-            })
-        }
-
-        MenuItemCompat.setOnActionExpandListener(searchMenuItem, object : MenuItemCompat.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                isSearchOpen = true
-                searchOpened()
-                return true
-            }
-
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                isSearchOpen = false
-                searchClosed()
-                return true
-            }
-        })
-    }
-
-    fun searchQueryChanged(searchText: String) {
-        Log.d("MainFragment","searchQueryChanged() get "+searchText)
-        if(searchText.isEmpty()) return
-        viewModel.itunesPodcastSearcher(searchText)
-    }
-
-    fun searchOpened() {
-        isSearchOpen = true
-        lastSearchedText = ""
-    }
-
-    fun searchClosed() {
-        isSearchOpen = false
-        if (!skipItemUpdating) {
-        }
-        skipItemUpdating = false
-        lastSearchedText = ""
     }
 
     override fun onItemClicked(position: Int) {

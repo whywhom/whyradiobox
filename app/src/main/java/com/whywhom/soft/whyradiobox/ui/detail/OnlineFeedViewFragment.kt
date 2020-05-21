@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -34,9 +35,14 @@ import kotlinx.android.synthetic.main.fragment_rss_detail.*
 
 class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.RssInterface {
 
+    private lateinit var playerNotificationManager: PlayerNotificationManager
+    private val PLAYBACK_CHANNEL_ID = "playback_channel"
+    private val PLAYBACK_NOTIFICATION_ID = 1
+
     private lateinit var rssList: ArrayList<RSSItem>
     private var showMore:Boolean = false
     private var player:SimpleExoPlayer? = null
+    private lateinit var mediaSource: MediaSource
     private var isSubscription = false;
     var podcastList:ArrayList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
 
@@ -177,15 +183,19 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
         var dataSourceFactory: DataSource.Factory =
             DefaultDataSourceFactory(this.context, mineType)
         // This is the MediaSource representing the media to be played.
-        var videoSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+        mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
             .createMediaSource(uri)
         // Prepare the player with the source.
         player!!.playWhenReady = true
         player_control_view.player = player
 //        player_control_view.showTimeoutMs = -1
-        player!!.prepare(videoSource);
+        player!!.prepare(mediaSource);
+
     }
 
+    override fun pause(position: Int) {
+
+    }
     private fun updateBtn(it: Boolean) {
         isSubscription = it;
         if (it) {

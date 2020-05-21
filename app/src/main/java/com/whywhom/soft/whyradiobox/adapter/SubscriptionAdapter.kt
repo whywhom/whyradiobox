@@ -1,6 +1,7 @@
 package com.whywhom.soft.whyradiobox.adapter
 
 import android.content.Context
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,11 +45,19 @@ RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         if(holder is ViewHolder) {
             var item = items.get(position)
             var profilePicURL: String? = item.coverurl
-            val request: RequestCreator =
-                Picasso.with(context).load(profilePicURL).placeholder(R.drawable.rss_64)
-            request.fit()
-                .centerCrop()
-                .into(holder.podcastCover)
+            if(TextUtils.isEmpty(profilePicURL)){
+                val request: RequestCreator =
+                    Picasso.with(context).load(R.drawable.rss_64).placeholder(R.drawable.rss_64)
+                request.fit()
+                    .centerCrop()
+                    .into(holder.podcastCover)
+            } else {
+                val request: RequestCreator =
+                    Picasso.with(context).load(profilePicURL).placeholder(R.drawable.rss_64)
+                request.fit()
+                    .centerCrop()
+                    .into(holder.podcastCover)
+            }
             var name = item.title
             holder.podcastName.text = name
             holder.podcastCover.setOnClickListener(View.OnClickListener {
