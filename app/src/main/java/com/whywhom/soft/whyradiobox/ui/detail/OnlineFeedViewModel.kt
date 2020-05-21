@@ -30,7 +30,7 @@ class OnlineFeedViewModel : ViewModel() {
     private var podcast = Podcast(0)
     var feedUrlLiveData = MutableLiveData<RSSFeed>()
 
-    fun getItemFeedUrl(feedUrl: String) {
+    fun getItemFeedUrl(feedUrl: String, coverUrl: String?) {
         var feedUrlLocl = feedUrl
         if (feedUrl.contains("subscribeonandroid.com")) {
             feedUrlLocl = feedUrl.replaceFirst("((www.)?(subscribeonandroid.com/))", "");
@@ -49,7 +49,7 @@ class OnlineFeedViewModel : ViewModel() {
                 .subscribe({
                     podcast.title = it.title
                     podcast.description = it.description
-//                    podcast.coverurl = podcastSearchResult.imageUrl!!
+                    podcast.coverurl = coverUrl!!
                     feedUrlLiveData.postValue(it)
 
                 }, {

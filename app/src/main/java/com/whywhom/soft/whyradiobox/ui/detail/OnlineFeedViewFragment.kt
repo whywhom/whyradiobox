@@ -114,7 +114,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
         })
         swipeRefreshLayout.post(Runnable {
             swipeRefreshLayout.setRefreshing(true)
-            viewModel.getItemFeedUrl(feedUrl!!)
+            viewModel.getItemFeedUrl(feedUrl!!,coverUrl)
         })
         swipeRefreshLayout.setEnabled(false);//设置为不能刷新
     }

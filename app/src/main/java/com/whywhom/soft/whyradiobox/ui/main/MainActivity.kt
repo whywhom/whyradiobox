@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -19,6 +20,7 @@ import com.whywhom.soft.whyradiobox.ui.episodes.EpisodesFragment
 import com.whywhom.soft.whyradiobox.ui.home.HomeFragment
 import com.whywhom.soft.whyradiobox.ui.setting.SettingsFragment
 import com.whywhom.soft.whyradiobox.ui.subscription.SubscriptionFragment
+import kotlinx.android.synthetic.main.app_bar_main_drawer.*
 import kotlinx.android.synthetic.main.nav_header_main_drawer.view.*
 
 
@@ -60,8 +62,31 @@ class MainActivity : AppCompatActivity() {
         val navSetting = headerLayout.findViewById<View>(R.id.nav_settings) as ImageView
         navSetting.setOnClickListener {
             navController.navigate(R.id.nav_settings)
+            drawerLayout.closeDrawer(navView)
         }
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar, R.string.drawerOpen, R.string.drawerClose)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        drawerLayout.addDrawerListener(object:DrawerLayout.DrawerListener{
+            override fun onDrawerStateChanged(p0: Int) {
+                //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onDrawerSlide(p0: View, p1: Float) {
+                //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onDrawerClosed(p0: View) {
+                //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onDrawerOpened(p0: View) {
+                //To change body of created functions use File | Settings | File Templates.
+            }
+        })
     }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
