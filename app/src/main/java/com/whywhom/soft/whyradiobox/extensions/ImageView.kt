@@ -8,5 +8,5 @@ import com.squareup.picasso.Picasso
  */
 
 fun ImageView.loadUrl(url: String) {
-    Picasso.with(context).load(url).centerCrop().into(this)
+    Picasso.get().load(url).centerCrop().into(this)
 }

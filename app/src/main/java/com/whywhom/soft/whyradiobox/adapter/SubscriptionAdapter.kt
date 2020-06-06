@@ -47,13 +47,13 @@ RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             var profilePicURL: String? = item.coverurl
             if(TextUtils.isEmpty(profilePicURL)){
                 val request: RequestCreator =
-                    Picasso.with(context).load(R.drawable.rss_64).placeholder(R.drawable.rss_64)
+                    Picasso.get().load(R.drawable.rss_64).placeholder(R.drawable.rss_64)
                 request.fit()
                     .centerCrop()
                     .into(holder.podcastCover)
             } else {
                 val request: RequestCreator =
-                    Picasso.with(context).load(profilePicURL).placeholder(R.drawable.rss_64)
+                    Picasso.get().load(profilePicURL).placeholder(R.drawable.rss_64)
                 request.fit()
                     .centerCrop()
                     .into(holder.podcastCover)

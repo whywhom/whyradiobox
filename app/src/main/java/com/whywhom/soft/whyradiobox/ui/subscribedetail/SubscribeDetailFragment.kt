@@ -71,7 +71,7 @@ class SubscribeDetailFragment : Fragment(), OnItemClickListener, SubscribeDetail
         viewModel.feedItemLiveData.observe(viewLifecycleOwner, Observer { feedList->
             if(feedList != null){
                 feedItemList = feedList
-                var feedListAdapter = SubscriptionListAdapter(this.context!!, feedItemList)
+                var feedListAdapter = SubscriptionListAdapter(this.requireContext(), feedItemList)
                 feedListAdapter.setOnItemClickListener(this)
                 feed_list.adapter = feedListAdapter
             }
@@ -108,11 +108,11 @@ class SubscribeDetailFragment : Fragment(), OnItemClickListener, SubscribeDetail
             feedItem.filepath = generateCacheFileName(feedItem.filename)
             feedItemList.add(feedItem)
         }
-        viewModel.writeFeedItemToDB(this.context!!,feedItemList,generateFileName(feedUrl));
+        viewModel.writeFeedItemToDB(this.requireContext(),feedItemList,generateFileName(feedUrl));
     }
 
     private fun generateCacheFileName(feedurl: String): String {
-        var path = getDiskCacheDir(this.context!!)
+        var path = getDiskCacheDir(this.requireContext())
         if(path != null){
             path += "/"+feedurl
         }
@@ -135,7 +135,7 @@ class SubscribeDetailFragment : Fragment(), OnItemClickListener, SubscribeDetail
             }
         }
 
-        val request: RequestCreator = Picasso.with(context).load(coverUrl).placeholder(R.drawable.rss_64)
+        val request: RequestCreator = Picasso.get().load(coverUrl).placeholder(R.drawable.rss_64)
         request.fit()
             .centerCrop()
             .into(imgvCover)

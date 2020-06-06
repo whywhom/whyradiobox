@@ -1,7 +1,10 @@
 package com.whywhom.soft.whyradiobox.ui.main
 
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -9,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -27,7 +31,8 @@ import kotlinx.android.synthetic.main.nav_header_main_drawer.view.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-
+    private lateinit var drawerLayout:DrawerLayout
+    private lateinit var navView: NavigationView
     val NAV_TAGS = arrayOf<String>(
         SubscriptionFragment.TAG,//订阅信息
         EpisodesFragment.TAG,//
@@ -40,8 +45,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -50,7 +55,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home,
                 R.id.nav_subscribe,
                 R.id.nav_episodes
-//                R.id.nav_settings
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -64,27 +68,6 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.nav_settings)
             drawerLayout.closeDrawer(navView)
         }
-        val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar, R.string.drawerOpen, R.string.drawerClose)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-        drawerLayout.addDrawerListener(object:DrawerLayout.DrawerListener{
-            override fun onDrawerStateChanged(p0: Int) {
-                //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onDrawerSlide(p0: View, p1: Float) {
-                //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onDrawerClosed(p0: View) {
-                //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onDrawerOpened(p0: View) {
-                //To change body of created functions use File | Settings | File Templates.
-            }
-        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -102,4 +85,11 @@ class MainActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onBackPressed() {
+        if(drawerLayout.isDrawerOpen(navView)) {
+            drawerLayout.closeDrawers()
+        } else{
+            moveTaskToBack(true);
+        }
+    }
 }

@@ -93,7 +93,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
     }
 
     private fun checkSubscription(rssFeed: RSSFeed) {
-        viewModel.checkSubscription(this.context!!,rssFeed, this);
+        viewModel.checkSubscription(this.requireContext(),rssFeed, this);
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -101,7 +101,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
         if(feedUrl == null){
             findNavController().popBackStack();
         }
-        activity!!.toolbar!!.title = title
+        requireActivity().toolbar!!.title = title
         viewModel = ViewModelProvider(this).get(OnlineFeedViewModel::class.java)
         feed_list.layoutManager = LinearLayoutManager(this.context)
         viewModel.feedUrlLiveData.observe(viewLifecycleOwner, Observer { rssFeed->
@@ -110,10 +110,10 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
                 showDetail(rssFeed!!)
                 showRssList(rssFeed!!)
             }
-            swipeRefreshLayout.setRefreshing(false);
+            swipeRefreshLayout.isRefreshing = false;
         })
         swipeRefreshLayout.post(Runnable {
-            swipeRefreshLayout.setRefreshing(true)
+            swipeRefreshLayout.isRefreshing = true
             viewModel.getItemFeedUrl(feedUrl!!,coverUrl)
         })
         swipeRefreshLayout.setEnabled(false);//设置为不能刷新
@@ -121,7 +121,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
 
     private fun showRssList(rssFeed: RSSFeed) {
         rssList = ArrayList(rssFeed.items)
-        var feedListAdapter = FeedListAdapter(this.context!!, rssList)
+        var feedListAdapter = FeedListAdapter(this.requireContext(), rssList)
         feedListAdapter.setOnPlayListener(this)
         feed_list.adapter = feedListAdapter
     }
@@ -149,11 +149,11 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
                 startActivity(intent)
                 findNavController().popBackStack()
             } else {
-                viewModel.subscription(this.context!!, this)
+                viewModel.subscription(this.requireContext(), this)
             }
         }
 
-        val request: RequestCreator =Picasso.with(context).load(coverUrl).placeholder(R.drawable.rss_64)
+        val request: RequestCreator =Picasso.get().load(coverUrl).placeholder(R.drawable.rss_64)
         request.fit()
             .centerCrop()
             .into(imgvCover)
@@ -162,7 +162,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
     override fun play(position: Int) {
         var mineType:String = ""
         lateinit var uri:Uri
-        player = PlayerUtil.getPlayer(this.context!!)
+        player = PlayerUtil.getPlayer(this.requireContext())
         if(!player_control_view.isVisible){
             player_control_view.visibility = View.VISIBLE
         }

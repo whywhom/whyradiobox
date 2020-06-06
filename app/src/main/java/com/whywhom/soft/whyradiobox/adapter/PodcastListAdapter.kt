@@ -44,7 +44,7 @@ RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             var item = items.get(position)
             var profilePicURL: String? = item.imageUrl
             val request: RequestCreator =
-                Picasso.with(context).load(profilePicURL).placeholder(R.drawable.rss_64)
+                Picasso.get().load(profilePicURL).placeholder(R.drawable.rss_64)
             request.fit()
                 .centerCrop()
                 .into(holder.podcastThumbnail)

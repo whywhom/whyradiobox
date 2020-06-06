@@ -2,14 +2,17 @@ package com.whywhom.soft.whyradiobox.ui.subscription
 
 import android.os.Bundle
 import android.os.Parcel
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.adapter.SubscriptionAdapter
 import com.whywhom.soft.whyradiobox.data.source.local.Podcast
@@ -31,6 +34,10 @@ class SubscriptionFragment() : Fragment(), SubscriptionAdapter.ItemClickListente
 
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,13 +57,8 @@ class SubscriptionFragment() : Fragment(), SubscriptionAdapter.ItemClickListente
         viewModel = ViewModelProvider(this).get(SubscriptionViewModel::class.java)
         // TODO: Use the ViewModel
         subscriptions_add.setOnClickListener { onClick->
-            run {
-//                val intent = FeedDiscoveryActivity.newIntent(
-//                    this.context,
-//                    FeedDiscoveryActivity.TYPE_EN
-//                )
-//                startActivity(intent)
-            }
+            Log.d("Subscription" ,"click search")
+            NavHostFragment.findNavController(this).navigate(R.id.onlineSearchFragment)
         }
         viewModel.podcastlLiveData.observe(viewLifecycleOwner, Observer{
             val adapter = SubscriptionAdapter(this.context!!, viewModel.getSubscriptionData().value!!)

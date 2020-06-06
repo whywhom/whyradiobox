@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.adapter.PodcastListAdapter
@@ -48,7 +49,7 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(OnlineSearchViewModel::class.java)
         // TODO: Use the ViewModel
-        activity!!.toolbar!!.title = ""
+        requireActivity().toolbar!!.title = ""
         val adapter = PodcastListAdapter(podcastList,context)
         adapter.setOnItemClick(this)
         podcast_list.layoutManager = LinearLayoutManager(activity)
@@ -123,6 +124,7 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         }
         return super.onOptionsItemSelected(item)
     }
+
     fun searchQueryChanged(searchText: String) {
         Log.d("OnlineSearchFragment","searchQueryChanged() get "+searchText)
         if(searchText.isEmpty()) return

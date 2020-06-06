@@ -23,6 +23,9 @@
         android:name="com.whywhom.soft.whyradiobox.ui.subscription.SubscriptionFragment"
         android:label="@string/subscribe"
         tools:layout="@layout/fragment_subscription">
+        <action
+            android:id="@+id/action_nav_subscribe_to_feedDiscoveryFragment"
+            app:destination="@id/feedDiscoveryFragment" />
     </fragment>
 
     <fragment
