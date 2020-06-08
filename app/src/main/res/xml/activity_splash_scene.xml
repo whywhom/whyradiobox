@@ -7,24 +7,27 @@
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
         motion:duration="1000">
-       <KeyFrameSet>
-       </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
-            motion:layout_constraintVertical_bias="0.2"
-            android:layout_height="wrap_content"
-            motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="220dp"
-            motion:layout_constraintHorizontal_bias="0.498"
+            android:id="@+id/img_logo"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            motion:layout_constraintTop_toBottomOf="@+id/imageView2"
-            android:id="@+id/txt_slogan" />
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/img_logo"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
 </MotionScene>

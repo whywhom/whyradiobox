@@ -2,22 +2,25 @@ package com.whywhom.soft.whyradiobox.ui.splash
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.MotionLayout
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.ui.main.MainActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SplashActivity : AppCompatActivity() {
 
+class SplashActivity : AppCompatActivity() {
+    private var mMotionLayout: MotionLayout? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        mMotionLayout = findViewById(R.id.motionLayout);
+//        mMotionLayout!!.transitionToStart();
+        mMotionLayout!!.transitionToEnd();
         apply {
             GlobalScope.launch { // launch a new coroutine in background and continue
                 delay(1000L)
