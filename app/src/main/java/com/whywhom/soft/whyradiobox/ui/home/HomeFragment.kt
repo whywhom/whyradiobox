@@ -6,13 +6,17 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.whywhom.soft.whyradiobox.R
+import com.whywhom.soft.whyradiobox.event.MessageEvent
+import com.whywhom.soft.whyradiobox.event.RefreshEvent
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
+import com.whywhom.soft.whyradiobox.ui.BaseFragment
 import com.whywhom.soft.whyradiobox.ui.discovery.FeedDiscoveryFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
     var podcastList:ArrayList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
+
     companion object {
         val MAX_TOPLIST = 100
         val TAG: String = "HomeFragment"
@@ -26,7 +30,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return super.onCreateView(inflater.inflate(R.layout.fragment_home, container, false))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +51,14 @@ class HomeFragment : Fragment() {
             var bundle : Bundle = Bundle()
             bundle.putInt("search_type", FeedDiscoveryFragment.TYPE_CN)
             bundle.putString("search_title", top_cn.text.toString())
-//            findNavController(this).navigate(R.id.feedDiscoveryFragment, bundle)
+
+        }
+    }
+
+    override fun onMessageEvent(messageEvent: MessageEvent) {
+        super.onMessageEvent(messageEvent)
+        if (messageEvent is RefreshEvent && this::class.java == messageEvent.activityClass) {
+            Log.d(TAG ,messageEvent.toString())
         }
     }
 

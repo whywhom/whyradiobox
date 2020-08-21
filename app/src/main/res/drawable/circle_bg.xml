@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval"
+    >
+    <!--width和height保持1:1的大小确保是圆形-->
+    <size android:width="1dp"
+        android:height="1dp"/>
+
+    <!--不推荐设置color，推荐在ImageView里设置backgroundTint属性，更灵活-->
+    <solid android:color="@color/colorPrimary"/>
+
+</shape>
