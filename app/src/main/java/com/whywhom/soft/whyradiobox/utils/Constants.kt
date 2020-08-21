@@ -1,5 +1,7 @@
 package com.whywhom.soft.whyradiobox.utils
 
+import android.os.Build
+import com.whywhom.soft.whyradiobox.RBApplication
 import java.math.BigDecimal
 
 /**
@@ -42,4 +44,37 @@ object Constants{
             value.toString() + "GB"
         }
     }
+
+    /**
+     * 获取当前应用程序的包名。
+     *
+     * @return 当前应用程序的包名。
+     */
+    val appPackage: String
+        get() = RBApplication.context.packageName
+
+    /**
+     * 获取当前应用程序的名称。
+     * @return 当前应用程序的名称。
+     */
+    val appName: String
+        get() = RBApplication.context.resources.getString(RBApplication.context.applicationInfo.labelRes)
+
+    /**
+     * 获取当前应用程序的版本名。
+     * @return 当前应用程序的版本名。
+     */
+    val appVersionName: String
+        get() = RBApplication.context.packageManager.getPackageInfo(appPackage, 0).versionName
+
+    /**
+     * 获取当前应用程序的版本号。
+     * @return 当前应用程序的版本号。
+     */
+    val appVersionCode: Long
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            RBApplication.context.packageManager.getPackageInfo(appPackage, 0).longVersionCode
+        } else {
+            RBApplication.context.packageManager.getPackageInfo(appPackage, 0).versionCode.toLong()
+        }
 }

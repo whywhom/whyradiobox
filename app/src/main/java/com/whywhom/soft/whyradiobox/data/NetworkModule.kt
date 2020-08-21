@@ -1,7 +1,5 @@
 package com.whywhom.soft.whyradiobox.data
 
-import dagger.Module
-import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -11,7 +9,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * Created by wuhaoyong on 2020-01-12.
  */
-@Module
 object NetworkModule {
     val itunesBaseUrl = "https://itunes.apple.com/"
     private var ipService: NetworkApiService
@@ -33,7 +30,6 @@ object NetworkModule {
         ipService = retrofit.create(NetworkApiService::class.java)
     }
 
-    @Provides
     fun provideRetrofitService(
     ): NetworkApiService {
         return ipService

@@ -23,7 +23,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity android:name=".ui.splash.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,10 +42,7 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-<!--                <action android:name="android.intent.action.MAIN" />-->
                 <action android:name="android.intent.action.VIEW" />
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
         </activity>
     </application>

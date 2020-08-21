@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.ui.discovery.FeedDiscoveryFragment
@@ -42,13 +41,13 @@ class HomeFragment : Fragment() {
             var bundle : Bundle = Bundle()
             bundle.putInt("search_type", FeedDiscoveryFragment.TYPE_EN)
             bundle.putString("search_title", top_en.text.toString())
-            findNavController(this).navigate(R.id.feedDiscoveryFragment, bundle)
+//            findNavController(this).navigate(R.id.feedDiscoveryFragment, bundle)
         }
         top_cn.setOnClickListener { onClick->
             var bundle : Bundle = Bundle()
             bundle.putInt("search_type", FeedDiscoveryFragment.TYPE_CN)
             bundle.putString("search_title", top_cn.text.toString())
-            findNavController(this).navigate(R.id.feedDiscoveryFragment, bundle)
+//            findNavController(this).navigate(R.id.feedDiscoveryFragment, bundle)
         }
     }
 
@@ -61,7 +60,7 @@ class HomeFragment : Fragment() {
         when(item.itemId){
             R.id.search->{
                 Log.d("HomeFragment" ,"click search")
-                findNavController(this).navigate(R.id.onlineSearchFragment)
+//                findNavController(this).navigate(R.id.onlineSearchFragment)
                 return true
             }
         }

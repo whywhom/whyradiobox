@@ -9,11 +9,11 @@ import android.view.ViewGroup
 
 import com.whywhom.soft.whyradiobox.R
 
-class EpisodesFragment : Fragment() {
+class LibraryFragment : Fragment() {
 
     companion object {
         val TAG: String = "AddFeedFragment"
-        fun newInstance() = EpisodesFragment()
+        fun newInstance() = LibraryFragment()
     }
 
     private lateinit var viewModel: EpisodesViewModel

@@ -5,5 +5,13 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="download_failed_red">#B00020</color>
+    <color name="white">#ffffff</color>
 
+    <color name="colorTextPrimary">#444444</color>
+    <color name="colorTextPrimaryDark">#333333</color>
+    <color name="colorTextSecondary">#888888</color>
+
+    <color name="blackAlpha50">#80000000</color>
+    <color name="gray">#ededed</color>
+    <color name="grayDark">#adadad</color>
 </resources>

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
@@ -99,7 +98,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if(feedUrl == null){
-            findNavController().popBackStack();
+//            findNavController().popBackStack();
         }
         requireActivity().toolbar!!.title = title
         viewModel = ViewModelProvider(this).get(OnlineFeedViewModel::class.java)
@@ -147,7 +146,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
                 val data = viewModel.getRss()
                 val intent = SubscribeDetailActivity.newIntent(this.context, data.title, data.rssurl, data.coverurl, data.trackId)
                 startActivity(intent)
-                findNavController().popBackStack()
+//                findNavController().popBackStack()
             } else {
                 viewModel.subscription(this.requireContext(), this)
             }
@@ -174,7 +173,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
             mineType = rssList[position].enclosure.mimeType
             uri = rssList[position].enclosure.url
         } else{
-            mineType = Util.getUserAgent(context, "RBApplication")
+            mineType = Util.getUserAgent(context!!, "RBApplication")
             if(rssList[position].link != null){
                 uri = rssList[position].link
             }

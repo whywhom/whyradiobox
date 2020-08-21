@@ -6,12 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
+//import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.adapter.SubscriptionAdapter
@@ -58,7 +56,7 @@ class SubscriptionFragment() : Fragment(), SubscriptionAdapter.ItemClickListente
         // TODO: Use the ViewModel
         subscriptions_add.setOnClickListener { onClick->
             Log.d("Subscription" ,"click search")
-            NavHostFragment.findNavController(this).navigate(R.id.onlineSearchFragment)
+//            NavHostFragment.findNavController(this).navigate(R.id.onlineSearchFragment)
         }
         viewModel.podcastlLiveData.observe(viewLifecycleOwner, Observer{
             val adapter = SubscriptionAdapter(this.context!!, viewModel.getSubscriptionData().value!!)

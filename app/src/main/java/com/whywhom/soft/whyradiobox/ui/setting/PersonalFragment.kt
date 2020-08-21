@@ -9,12 +9,12 @@ import android.view.ViewGroup
 
 import com.whywhom.soft.whyradiobox.R
 
-class SettingsFragment : Fragment() {
+class PersonalFragment : Fragment() {
 
     companion object {
         val TAG: String = "SettingsFragment"
 
-        fun newInstance() = SettingsFragment()
+        fun newInstance() = PersonalFragment()
     }
 
     private lateinit var viewModel: SettingsViewModel

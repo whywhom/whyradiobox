@@ -10,8 +10,6 @@ import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.adapter.PodcastListAdapter
@@ -101,6 +99,6 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
         bundle.putString("title", entry.title!!)
         bundle.putString("feed_url", entry.feedUrl!!)
         bundle.putString("feed_cover_url", entry.imageUrl!!)
-        NavHostFragment.findNavController(this).navigate(R.id.onlineFeedViewFragment, bundle)
+//        NavHostFragment.findNavController(this).navigate(R.id.onlineFeedViewFragment, bundle)
     }
 }

@@ -132,4 +132,6 @@
     <string name="drawerOpen">open</string>
     <string name="drawerClose">close</string>
     <string name="slogan">Listening......</string>
+    <string name="library">Library</string>
+    <string name="personal">Personal</string>
 </resources>

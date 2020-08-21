@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/white"
+    android:weightSum="3"
+    android:orientation="horizontal"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/ivDiscover"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/btn_home_page" />
+
+        <TextView
+            android:id="@+id/tvDiscover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="@string/discover"
+            android:textColor="@drawable/bottom_navigation_bar_radio_color"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/ivLibrary"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:contentDescription="@string/app_name"
+            android:padding="2dp"
+            android:src="@drawable/btn_library"
+            app:layout_constraintBottom_toTopOf="@id/tvLibrary"
+            app:layout_constraintEnd_toEndOf="@+id/tvLibrary"
+            app:layout_constraintEnd_toStartOf="@id/ivPersonal"
+            app:layout_constraintStart_toEndOf="@id/ivDiscover"
+            app:layout_constraintStart_toStartOf="@+id/tvLibrary"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvLibrary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="@string/library"
+            android:textColor="@drawable/bottom_navigation_bar_radio_color"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ivLibrary"
+            app:layout_constraintStart_toStartOf="@id/ivLibrary"
+            app:layout_constraintTop_toBottomOf="@+id/ivLibrary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/ivPersonal"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:contentDescription="@string/app_name"
+            android:padding="1dp"
+            android:src="@drawable/btn_personal"
+            app:layout_constraintBottom_toTopOf="@id/tvPersonal"
+            app:layout_constraintEnd_toEndOf="@+id/tvPersonal"
+            app:layout_constraintStart_toEndOf="@id/ivLibrary"
+            app:layout_constraintStart_toStartOf="@+id/tvPersonal"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvPersonal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="@string/personal"
+            android:textColor="@drawable/bottom_navigation_bar_radio_color"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ivPersonal"
+            app:layout_constraintStart_toStartOf="@id/ivPersonal"
+            app:layout_constraintTop_toBottomOf="@+id/ivPersonal" />
+    </LinearLayout>
+
+</LinearLayout>
