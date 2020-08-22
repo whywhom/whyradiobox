@@ -2,6 +2,9 @@ package com.whywhom.soft.whyradiobox.utils
 
 import android.os.Build
 import com.whywhom.soft.whyradiobox.RBApplication
+import com.whywhom.soft.whyradiobox.data.RBNetwork
+import com.whywhom.soft.whyradiobox.data.RBRepository
+import com.whywhom.soft.whyradiobox.ui.home.HomeViewModelFactory
 import java.math.BigDecimal
 
 /**
@@ -77,4 +80,8 @@ object Constants{
         } else {
             RBApplication.context.packageManager.getPackageInfo(appPackage, 0).versionCode.toLong()
         }
+
+    private fun getMainRepository() = RBRepository.getInstance(RBNetwork.getInstance())
+
+    fun getHomeViewModelFactory() = HomeViewModelFactory(getMainRepository())
 }

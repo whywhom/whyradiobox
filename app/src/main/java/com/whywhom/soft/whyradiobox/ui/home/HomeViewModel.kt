@@ -2,11 +2,16 @@ package com.whywhom.soft.whyradiobox.ui.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import com.whywhom.soft.whyradiobox.data.NetworkModule
+import com.whywhom.soft.whyradiobox.data.RBRepository
 import com.whywhom.soft.whyradiobox.model.ItunesPodcastSearcher
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.ui.home.HomeFragment.Companion.MAX_TOPLIST
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
@@ -15,7 +20,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(val repository: RBRepository) : ViewModel() {
     private var podcastList: ArrayList<PodcastSearchResult> = ArrayList(0)
     var podcastListLiveData = MutableLiveData<ArrayList<PodcastSearchResult>>()
 
@@ -52,12 +57,6 @@ class HomeViewModel : ViewModel() {
     }
 
     fun itunesPodcastSearcher(searchText: String) {
-//        var encodedQuery: String
-//        try {
-//            encodedQuery = URLEncoder.encode(searchText, "UTF-8")
-//        } catch (e: UnsupportedEncodingException) { // this won't ever be thrown
-//            encodedQuery = searchText
-//        }
         NetworkModule.provideRetrofitService().search(searchText).enqueue(
             object : retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -87,5 +86,14 @@ class HomeViewModel : ViewModel() {
 
             }
         )
+    }
+
+    fun getTopPodcastList(lang: String, rank: String) {
+        podcastList.clear()
+        runBlocking<Unit> {
+            val response = repository.refreshToprank(lang, rank)
+            val resultString = response!!.string()
+
+        }
     }
 }

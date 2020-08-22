@@ -11,6 +11,7 @@ import com.whywhom.soft.whyradiobox.event.RefreshEvent
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.ui.BaseFragment
 import com.whywhom.soft.whyradiobox.ui.discovery.FeedDiscoveryFragment
+import com.whywhom.soft.whyradiobox.utils.Constants
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -40,18 +41,12 @@ class HomeFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this, Constants.getHomeViewModelFactory()).get(HomeViewModel::class.java)
         top_en.setOnClickListener { onClick->
-            var bundle : Bundle = Bundle()
-            bundle.putInt("search_type", FeedDiscoveryFragment.TYPE_EN)
-            bundle.putString("search_title", top_en.text.toString())
-//            findNavController(this).navigate(R.id.feedDiscoveryFragment, bundle)
+            viewModel.getTopPodcastList("US", "100")
         }
         top_cn.setOnClickListener { onClick->
-            var bundle : Bundle = Bundle()
-            bundle.putInt("search_type", FeedDiscoveryFragment.TYPE_CN)
-            bundle.putString("search_title", top_cn.text.toString())
-
+            viewModel.getTopPodcastList("CN", "100")
         }
     }
 
