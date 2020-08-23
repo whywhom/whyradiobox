@@ -7,9 +7,6 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
 import java.util.*
 
@@ -18,34 +15,18 @@ import java.util.*
  * Created by wuhaoyong on 2020-01-12.
  */
 object NetworkModule {
-    val itunesBaseUrl = "https://itunes.apple.com/"
-    private var ipService: NetworkApiService
 
-    //此类接口的基地址
-    private lateinit var retrofit: Retrofit
-    private lateinit var client: OkHttpClient
+    const val itunesBaseUrl = "https://itunes.apple.com/"
 
-    val httpClient = OkHttpClient.Builder()
+    private val httpClient = OkHttpClient.Builder()
         .addInterceptor(LoggingInterceptor())
         .addInterceptor(HeaderInterceptor())
         .addInterceptor(BasicParamsInterceptor())
         .build()
 
-    private val builder = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .client(httpClient)
-        .addConverterFactory(ScalarsConverterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create())
-
-
-    init{
-        retrofit = builder.build()
-        ipService = retrofit.create(NetworkApiService::class.java)
-    }
-
-    fun provideRetrofitService(
-    ): NetworkApiService {
-        return ipService
+    fun provideOKhttpService(
+    ): OkHttpClient {
+        return httpClient
     }
 
     class LoggingInterceptor : Interceptor {

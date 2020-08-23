@@ -2,15 +2,11 @@ package com.whywhom.soft.whyradiobox.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.Response
 
 class RBRepository private constructor(private val rbNetwork: RBNetwork){
 
-    suspend fun refreshToprank(lang: String, limit: String) = requestToprank(lang, limit)
-
-    private suspend fun requestToprank(lang: String, limit: String) = withContext(Dispatchers.IO) {
-        val response = rbNetwork.fetchToprank(lang, limit)
-        response
-    }
+    suspend fun refreshToprank(lang: String, limit: String) = rbNetwork.fetchToprank(lang, limit)
 
     companion object {
 

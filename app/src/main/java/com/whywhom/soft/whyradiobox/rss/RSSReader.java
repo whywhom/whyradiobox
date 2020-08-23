@@ -16,7 +16,6 @@
 
 package com.whywhom.soft.whyradiobox.rss;
 
-import retrofit2.HttpException;
 
 import java.io.IOException;
 import java.io.InputStream;
