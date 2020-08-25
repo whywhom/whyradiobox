@@ -1,57 +1,29 @@
 package com.whywhom.soft.whyradiobox.ui.home
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
-import com.whywhom.soft.whyradiobox.data.NetworkModule
+import com.whywhom.soft.whyradiobox.data.HttpRepository
 import com.whywhom.soft.whyradiobox.data.RBRepository
 import com.whywhom.soft.whyradiobox.model.ItunesPodcastSearcher
+import com.whywhom.soft.whyradiobox.model.ItunesSearchPodcast
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
-import com.whywhom.soft.whyradiobox.ui.home.HomeFragment.Companion.MAX_TOPLIST
+import com.whywhom.soft.whyradiobox.ui.BaseViewModel
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.ResponseBody
-import org.json.JSONObject
-import java.util.*
-import kotlin.collections.ArrayList
+import java.io.IOException
 
 
-class HomeViewModel(val repository: RBRepository) : ViewModel() {
-    private var podcastList: ArrayList<PodcastSearchResult> = ArrayList(0)
-    var podcastListLiveData = MutableLiveData<ArrayList<PodcastSearchResult>>()
-
-//    fun getTopPodcastList() {
-//        var country: String = Locale.getDefault().getCountry().decapitalize()
-//        podcastList.clear()
-//        NetworkModule.provideRetrofitService()
-//            .getTopList(country, MAX_TOPLIST.toString()).enqueue(
-//                object : retrofit2.Callback<ResponseBody> {
-//                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-//                        var throwable = t
-//                        podcastList.clear()
-//                        podcastListLiveData.postValue(podcastList)
-//                    }
-//                    override fun onResponse(
-//                        call: Call<ResponseBody>,
-//                        response: Response<ResponseBody>) {
-//                        var rsp = response.body()!!.string()
-//                        val result = JSONObject(rsp)
-//                        val feed: JSONObject = result.getJSONObject("feed")
-//                        val entries = feed.getJSONArray("entry")
-//                        var itunesPodcastSearcher: ItunesPodcastSearcher =
-//                        Gson().fromJson(rsp,ItunesPodcastSearcher::class.java)
-//                        var i = 0
-//                        for (i in 0 until entries.length()) {
-//                            val json = entries.getJSONObject(i)
-//                            podcastList.add(PodcastSearchResult.fromItunesToplist(json));
-//                        }
-//                        podcastListLiveData.postValue(podcastList)
-//                    }
-//
-//                }
-//            )
-//    }
+class HomeViewModel(val repository: RBRepository) : BaseViewModel() {
+    var podcastTopCnLiveData = MutableLiveData<ItunesPodcastSearcher>()
+    var podcastTopEnLiveData = MutableLiveData<ItunesPodcastSearcher>()
+    var podcastCnnLiveData = MutableLiveData<ItunesSearchPodcast>()
+    var podcastBbcLiveData = MutableLiveData<ItunesSearchPodcast>()
+    var podcastVoaLiveData = MutableLiveData<ItunesSearchPodcast>()
 //
 //    fun itunesPodcastSearcher(searchText: String) {
 //        NetworkModule.provideRetrofitService().search(searchText).enqueue(
@@ -86,14 +58,67 @@ class HomeViewModel(val repository: RBRepository) : ViewModel() {
 //    }
 
     fun getTopPodcastList(lang: String, rank: String) {
-        podcastList.clear()
-        runBlocking {
-            val response = async {repository.refreshToprank(lang, rank)}.await()
-            var result = response.body()?.string()
-            val rsp = JSONObject(result)
-            val feed: JSONObject = rsp.getJSONObject("feed")
-            val entries = feed.getJSONArray("entry")
-        }
+        launchOnUITryCatch(
+            {
+                val topPodcast = async(IO) { HttpRepository.getTopList(lang, rank) }.await()
+                when(lang) {
+                    "CN" -> {
+                        podcastTopCnLiveData.postValue(topPodcast.await())
+                    }
+                    "US" -> {
+                        podcastTopEnLiveData.postValue(topPodcast.await())
+                    }
+                }
+            },
+            {
+                Log.i(HomeViewModel::class.java.simpleName, "${it.message}")
+            },
+            {
+                Log.i(HomeViewModel::class.java.simpleName, "finally")
+            },
+            true)
+    }
 
+    fun getJsonDataFromAsset(context: Context, media: String) {
+        launch(IO) {
+            val jsonString: String
+            var gson = Gson()
+            try {
+                when (media) {
+                    "CNN" -> {
+                        jsonString =
+                            context.assets.open("cnn.json").bufferedReader().use { it.readText() }
+                        podcastCnnLiveData.postValue(
+                            gson.fromJson(
+                                jsonString,
+                                ItunesSearchPodcast::class.java
+                            )
+                        )
+                    }
+                    "BBC" -> {
+                        jsonString =
+                            context.assets.open("bbc.json").bufferedReader().use { it.readText() }
+                        podcastBbcLiveData.postValue(
+                            gson.fromJson(
+                                jsonString,
+                                ItunesSearchPodcast::class.java
+                            )
+                        )
+                    }
+                    "VOA" -> {
+                        jsonString =
+                            context.assets.open("voa.json").bufferedReader().use { it.readText() }
+                        podcastVoaLiveData.postValue(
+                            gson.fromJson(
+                                jsonString,
+                                ItunesSearchPodcast::class.java
+                            )
+                        )
+                    }
+                }
+            } catch (ioException: IOException) {
+                ioException.printStackTrace()
+            }
+        }
     }
 }

@@ -1,181 +1,262 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical">
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="8dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="4dp">
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/search_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:contentDescription="@string/search_podcast_hint"
+                    android:scaleType="center"
+                    android:src="@android:drawable/ic_menu_search" />
+
+                <EditText
+                    android:id="@+id/combinedFeedSearchBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:focusable="false"
+                    android:hint="@string/search_podcast_hint"
+                    android:imeOptions="actionSearch"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:textSize="@dimen/item_size_small" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_bbc"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/circle_bg"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_panda" />
+
+                    <TextView
+                        android:id="@+id/tv_bbc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="@string/podcast_bbc"
+                        android:textSize="@dimen/item_size_small" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_cnn"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/circle_bg"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_abc" />
+
+                    <TextView
+                        android:id="@+id/tv_cnn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="@string/podcast_cnn"
+                        android:textSize="@dimen/item_size_small" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_voa"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/circle_bg"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_abc" />
+
+                    <TextView
+                        android:id="@+id/tv_voa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="@string/podcast_voa"
+                        android:textSize="@dimen/item_size_small" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_recommend"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/circle_bg"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_best" />
+
+                    <TextView
+                        android:id="@+id/tv_recommend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="@string/recommend"
+                        android:textSize="@dimen/item_size_small" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/search_icon"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:contentDescription="@string/search_podcast_hint"
-                android:scaleType="center"
-                android:src="@android:drawable/ic_menu_search"/>
-
-            <EditText
-                android:id="@+id/combinedFeedSearchBox"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="8dp"
+                android:text="@string/top_cn"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"
                 android:layout_weight="1"
-                android:background="@null"
-                android:focusable="false"
-                android:hint="@string/search_podcast_hint"
-                android:imeOptions="actionSearch"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:textSize="@dimen/item_size_small"/>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                android:textColor="?android:attr/textColorPrimary"/>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="8dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="4dp">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:text="@string/discover_more"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:id="@+id/discover_more_cn"/>
+        </LinearLayout>
+
+<!--        <androidx.fragment.app.FragmentContainerView-->
+<!--            android:id="@+id/quickFeedDiscovery"-->
+<!--            android:name="de.danoeh.antennapod.fragment.QuickFeedDiscoveryFragment"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:padding="16dp">
-                <ImageView
-                    android:id="@+id/iv_cntop"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@drawable/circle_bg"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_panda" />
-
-                <TextView
-                    android:id="@+id/tv_cntop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="@string/top_cn"
-                    android:textSize="@dimen/item_size_small"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:padding="16dp">
-
-                <ImageView
-                    android:id="@+id/iv_entop"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@drawable/circle_bg"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_abc" />
-
-                <TextView
-                    android:id="@+id/tv_entop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="@string/top_en"
-                    android:textSize="@dimen/item_size_small"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:padding="16dp">
-
-                <ImageView
-                    android:id="@+id/iv_recommend"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@drawable/circle_bg"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_best" />
-
-                <TextView
-                    android:id="@+id/tv_recommend"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="@string/recommend"
-                    android:textSize="@dimen/item_size_small"/>
-            </LinearLayout>
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="1"
-        android:scrollbars="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical"
-            android:padding="16dp">
-
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal">
             <TextView
-                android:id="@+id/top_en"
-                android:layout_width="match_parent"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:text="@string/top_en"/>
+                android:text="@string/top_en"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:textColor="?android:attr/textColorPrimary"/>
 
-            <TextView
-                android:id="@+id/top_cn"
-                android:layout_width="match_parent"
+            <Button
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:text="@string/top_cn"/>
-
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:text="@string/discover_more"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:id="@+id/discover_more_en"/>
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</ScrollView>

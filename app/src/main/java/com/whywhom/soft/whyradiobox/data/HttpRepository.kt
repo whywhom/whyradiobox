@@ -1,34 +1,36 @@
 package com.whywhom.soft.whyradiobox.data
 
 import android.os.Build
-import android.util.Log
 import com.google.gson.GsonBuilder
+import com.tanzhiqiang.kmvvm.ext.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import android.util.Log
 import java.io.IOException
 import java.util.*
-
 
 /**
  * Created by wuhaoyong on 2020-01-12.
  */
-object NetworkModule {
+object HttpRepository {
 
     const val itunesBaseUrl = "https://itunes.apple.com/"
 
-    private val httpClient = OkHttpClient.Builder()
-        .addInterceptor(LoggingInterceptor())
-        .addInterceptor(HeaderInterceptor())
-        .addInterceptor(BasicParamsInterceptor())
-        .build()
-
-    fun provideOKhttpService(
-    ): OkHttpClient {
-        return httpClient
-    }
-
+//    private val httpClient = OkHttpClient.Builder()
+//        .addInterceptor(LoggingInterceptor())
+//        .addInterceptor(HeaderInterceptor())
+//        .addInterceptor(BasicParamsInterceptor())
+//        .build()
+//
+//    fun provideOKhttpService(
+//    ): OkHttpClient {
+//        return httpClient
+//    }
+//
     class LoggingInterceptor : Interceptor {
 
         @Throws(IOException::class)
@@ -72,4 +74,25 @@ object NetworkModule {
             return chain.proceed(request)
         }
     }
+private fun getApiService(): NetworkApiService {
+    return Retrofit.Builder()
+        .baseUrl(itunesBaseUrl)
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
+        .client(provideOkHttpClient(provideLoggingInterceptor()))
+        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+        .build()
+        .create(NetworkApiService::class.java)
+}
+
+    private fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient = OkHttpClient.Builder().apply {
+//        addInterceptor(interceptor)
+        addInterceptor(LoggingInterceptor())
+        addInterceptor(HeaderInterceptor())
+        addInterceptor(BasicParamsInterceptor())
+    }.build()
+
+    private fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor()
+        .apply { level = HttpLoggingInterceptor.Level.BODY }
+
+    fun getTopList(lang:String, limit:String) = getApiService().getTopList(lang, limit);
 }

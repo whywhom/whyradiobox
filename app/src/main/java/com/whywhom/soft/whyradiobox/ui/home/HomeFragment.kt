@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.event.MessageEvent
@@ -42,12 +43,37 @@ class HomeFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, Constants.getHomeViewModelFactory()).get(HomeViewModel::class.java)
-        top_en.setOnClickListener { onClick->
-            viewModel.getTopPodcastList("US", "100")
+        viewModel.podcastTopCnLiveData.observe(viewLifecycleOwner, Observer{
+            var item = it?.feed;
+            var list = item?.link
+        })
+        viewModel.podcastTopEnLiveData.observe(viewLifecycleOwner, Observer{
+            var item = it?.feed;
+            var list = item?.link
+        })
+        viewModel.podcastBbcLiveData.observe(viewLifecycleOwner, Observer{
+            var item = it?.feed;
+            var list = item?.link
+        })
+        viewModel.podcastCnnLiveData.observe(viewLifecycleOwner, Observer{
+            var item = it?.feed;
+            var list = item?.link
+        })
+        viewModel.podcastVoaLiveData.observe(viewLifecycleOwner, Observer{
+            var item = it?.feed;
+            var list = item?.link
+        })
+        iv_bbc.setOnClickListener { onClick->
+            viewModel.getJsonDataFromAsset(context!!,"BBC")
         }
-        top_cn.setOnClickListener { onClick->
-            viewModel.getTopPodcastList("CN", "100")
+        iv_cnn.setOnClickListener { onClick->
+            viewModel.getJsonDataFromAsset(context!!,"CNN")
         }
+        iv_voa.setOnClickListener { onClick->
+            viewModel.getJsonDataFromAsset(context!!,"VOA")
+        }
+        viewModel.getTopPodcastList("US", "100")
+        viewModel.getTopPodcastList("CN", "100")
     }
 
     override fun onMessageEvent(messageEvent: MessageEvent) {

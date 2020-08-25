@@ -6,8 +6,6 @@ import okhttp3.Response
 
 class RBRepository private constructor(private val rbNetwork: RBNetwork){
 
-    suspend fun refreshToprank(lang: String, limit: String) = rbNetwork.fetchToprank(lang, limit)
-
     companion object {
 
         private var repository: RBRepository? = null

@@ -22,9 +22,12 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
-    <string name="top_en">EN Top 100</string>
+    <string name="top_en">English Top 100</string>
     <string name="top_cn">中文 Top 100</string>
-    <string name="recommend">Recommend</string>
+    <string name="podcast_bbc">BBC</string>
+    <string name="podcast_cnn">CNN</string>
+    <string name="podcast_voa">VOA</string>
+    <string name="recommend">More</string>
     <string name="search_podcast_hint">Search podcast…</string>
     <string name="search_itunes_label">Search iTunes</string>
     <string name="discover">Discover</string>

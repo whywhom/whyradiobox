@@ -2,10 +2,7 @@ package com.whywhom.soft.whyradiobox.ui.search
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.whywhom.soft.whyradiobox.data.NetworkModule
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
-import okhttp3.ResponseBody
-import org.json.JSONObject
 
 class OnlineSearchViewModel : ViewModel() {
     private var podcastList: ArrayList<PodcastSearchResult> = ArrayList(0)

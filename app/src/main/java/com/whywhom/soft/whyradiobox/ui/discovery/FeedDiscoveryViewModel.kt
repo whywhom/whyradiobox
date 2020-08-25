@@ -2,12 +2,7 @@ package com.whywhom.soft.whyradiobox.ui.discovery
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
-import com.whywhom.soft.whyradiobox.data.NetworkModule
-import com.whywhom.soft.whyradiobox.model.ItunesPodcastSearcher
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
-import okhttp3.ResponseBody
-import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
 
