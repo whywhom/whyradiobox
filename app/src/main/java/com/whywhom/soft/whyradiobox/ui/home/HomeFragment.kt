@@ -3,22 +3,25 @@ package com.whywhom.soft.whyradiobox.ui.home
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
+import android.widget.AdapterView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.whywhom.soft.whyradiobox.R
+import com.whywhom.soft.whyradiobox.adapter.ItunesPodcastListAdapter
 import com.whywhom.soft.whyradiobox.event.MessageEvent
 import com.whywhom.soft.whyradiobox.event.RefreshEvent
+import com.whywhom.soft.whyradiobox.model.Entry
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.ui.BaseFragment
-import com.whywhom.soft.whyradiobox.ui.discovery.FeedDiscoveryFragment
 import com.whywhom.soft.whyradiobox.utils.Constants
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment(), AdapterView.OnItemClickListener{
     var podcastList:ArrayList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
-
+    private val NUM_SUGGESTIONS = 12
+    lateinit var topEnAdapter: ItunesPodcastListAdapter
+    lateinit var topCnAdapter:ItunesPodcastListAdapter
     companion object {
         val MAX_TOPLIST = 100
         val TAG: String = "HomeFragment"
@@ -38,48 +41,87 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)//想让Fragment中的onCreateOptionsMenu生效必须先调用setHasOptionsMenu方法，否则Toolbar没有菜单。
         super.onViewCreated(view, savedInstanceState)
+        topCnAdapter = ItunesPodcastListAdapter(activity)
+        grid_view_cn.setAdapter(topCnAdapter)
+        grid_view_cn.setOnItemClickListener(this)
+
+        val displayMetrics = context!!.resources.displayMetrics
+        val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
+        if (screenWidthDp > 600) {
+            grid_view_cn.setNumColumns(6)
+        } else {
+            grid_view_cn.setNumColumns(4)
+        }
+
+        topEnAdapter = ItunesPodcastListAdapter(activity)
+        grid_view_en.setAdapter(topEnAdapter)
+        grid_view_en.setOnItemClickListener(this)
+        if (screenWidthDp > 600) {
+            grid_view_en.setNumColumns(6)
+        } else {
+            grid_view_en.setNumColumns(4)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, Constants.getHomeViewModelFactory()).get(HomeViewModel::class.java)
-        viewModel.podcastTopCnLiveData.observe(viewLifecycleOwner, Observer{
-            var item = it?.feed;
-            var list = item?.link
-        })
-        viewModel.podcastTopEnLiveData.observe(viewLifecycleOwner, Observer{
-            var item = it?.feed;
-            var list = item?.link
-        })
-        viewModel.podcastBbcLiveData.observe(viewLifecycleOwner, Observer{
-            var item = it?.feed;
-            var list = item?.link
-        })
-        viewModel.podcastCnnLiveData.observe(viewLifecycleOwner, Observer{
-            var item = it?.feed;
-            var list = item?.link
-        })
-        viewModel.podcastVoaLiveData.observe(viewLifecycleOwner, Observer{
-            var item = it?.feed;
-            var list = item?.link
-        })
-        iv_bbc.setOnClickListener { onClick->
-            viewModel.getJsonDataFromAsset(context!!,"BBC")
-        }
-        iv_cnn.setOnClickListener { onClick->
-            viewModel.getJsonDataFromAsset(context!!,"CNN")
-        }
-        iv_voa.setOnClickListener { onClick->
-            viewModel.getJsonDataFromAsset(context!!,"VOA")
-        }
+        initObserve()
+        initListener()
         viewModel.getTopPodcastList("US", "100")
         viewModel.getTopPodcastList("CN", "100")
     }
 
+    private fun initListener() {
+        iv_bbc.setOnClickListener { onClick->
+            viewModel.getJsonDataFromAsset(context!!, "BBC")
+        }
+        iv_cnn.setOnClickListener { onClick->
+            viewModel.getJsonDataFromAsset(context!!, "CNN")
+        }
+        iv_voa.setOnClickListener { onClick->
+            viewModel.getJsonDataFromAsset(context!!, "VOA")
+        }
+    }
+
+    private fun initObserve(){
+        viewModel.podcastTopCnLiveData.observe(viewLifecycleOwner, Observer {
+            var item = it?.feed?.entry;
+            if (item != null) {
+
+                // Fill with dummy elements to have a fixed height and
+                // prevent the UI elements below from jumping on slow connections
+                val topCn: MutableList<Entry> = ArrayList()
+                for (i in 0 until NUM_SUGGESTIONS) {
+                    topCn.add(item.get(i))
+                }
+                topCnAdapter.updateData(topCn)
+            }
+        })
+        viewModel.podcastTopEnLiveData.observe(viewLifecycleOwner, Observer {
+            var item = it?.feed?.entry;
+            if (item != null) {
+                val topEn: MutableList<Entry> = ArrayList()
+                for (i in 0 until NUM_SUGGESTIONS) {
+                    topEn.add(item.get(i))
+                }
+                topEnAdapter.updateData(topEn)
+            }
+        })
+        viewModel.podcastBbcLiveData.observe(viewLifecycleOwner, Observer {
+            var item = it?.results;
+        })
+        viewModel.podcastCnnLiveData.observe(viewLifecycleOwner, Observer {
+            var item = it?.results;
+        })
+        viewModel.podcastVoaLiveData.observe(viewLifecycleOwner, Observer {
+            var item = it?.results;
+        })
+    }
     override fun onMessageEvent(messageEvent: MessageEvent) {
         super.onMessageEvent(messageEvent)
         if (messageEvent is RefreshEvent && this::class.java == messageEvent.activityClass) {
-            Log.d(TAG ,messageEvent.toString())
+            Log.d(TAG, messageEvent.toString())
         }
     }
 
@@ -90,12 +132,16 @@ class HomeFragment : BaseFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.search->{
-                Log.d("HomeFragment" ,"click search")
+            R.id.search -> {
+                Log.d("HomeFragment", "click search")
 //                findNavController(this).navigate(R.id.onlineSearchFragment)
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
     }
 }
