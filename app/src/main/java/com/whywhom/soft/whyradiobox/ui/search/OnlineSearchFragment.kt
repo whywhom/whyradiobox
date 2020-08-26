@@ -5,8 +5,8 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,11 +22,14 @@ import kotlinx.android.synthetic.main.fragment_add_feed.*
 
 
 class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
-    private lateinit var queryStr: String
     private var mSearchView: SearchView? = null
     var podcastList:ArrayList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
     companion object {
-        fun newInstance() = OnlineSearchFragment()
+        private lateinit var queryStr: String
+        fun newInstance(query: String):Fragment{
+            queryStr = query
+            return OnlineSearchFragment()
+        }
     }
 
     private lateinit var viewModel: OnlineSearchViewModel
@@ -46,9 +49,9 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(OnlineSearchViewModel::class.java)
-        // TODO: Use the ViewModel
-        requireActivity().toolbar!!.title = ""
-        val adapter = PodcastListAdapter(podcastList,context)
+        initToolbar()
+
+        val adapter = PodcastListAdapter(podcastList, context)
         adapter.setOnItemClick(this)
         podcast_list.layoutManager = LinearLayoutManager(activity)
         podcast_list.adapter = adapter
@@ -56,14 +59,15 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
             override fun loadMore() {
 
             }
+
             override fun refresh() {
-                if(queryStr.isNotEmpty()) {
+                if (queryStr.isNotEmpty()) {
                     swipeRefreshLayout.setRefreshing(true)
                     searchQueryChanged(queryStr)
                 }
             }
         })
-        viewModel.podcastListLiveData.observe(viewLifecycleOwner, Observer { it->
+        viewModel.podcastListLiveData.observe(viewLifecycleOwner, Observer { it ->
             var len = it.size
             podcastList = it
             adapter.submitList(podcastList)
@@ -73,8 +77,16 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
 
     }
 
+    private fun initToolbar() {
+        toolbar?.title = ""
+        toolbar.navigationIcon =
+            getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24, null)
+        toolbar.inflateMenu(R.menu.menu_search);
+        setupSearch(toolbar.menu)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_search, menu)
+//        inflater.inflate(R.menu.menu_search, menu)
         setupSearch(menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -89,11 +101,11 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
             isSubmitButtonEnabled = false
             queryHint = getString(R.string.search)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String) : Boolean {
+                override fun onQueryTextSubmit(query: String): Boolean {
                     //提交按钮的点击事件
 //                    Toast.makeText(activity, query, Toast.LENGTH_SHORT).show()
                     Log.i("OnlineSearchFragment", "内容: $query")
-                    this@OnlineSearchFragment.queryStr = query
+                    queryStr = query
                     searchQueryChanged(query)
                     KeyboardUtils.hideKeyboard(this@OnlineSearchFragment.activity!!)
                     return true
@@ -112,19 +124,21 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         //设置搜索框直接展开显示。左侧有无放大镜(在搜索框中) 右侧无叉叉 有输入内容后有叉叉 不能关闭搜索框
         mSearchView!!.onActionViewExpanded();
         mSearchView!!.queryHint = getString(R.string.search_podcast_hint)
+        val mSearchEditView: SearchAutoComplete = mSearchView!!.findViewById(R.id.search_src_text)
+        mSearchEditView!!.setHintTextColor(getResources().getColor(R.color.white));
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.search->{
-                Log.d("SearchFragment" ,"click search")
+            R.id.search -> {
+                Log.d("SearchFragment", "click search")
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     fun searchQueryChanged(searchText: String) {
-        Log.d("OnlineSearchFragment","searchQueryChanged() get "+searchText)
+        Log.d("OnlineSearchFragment", "searchQueryChanged() get " + searchText)
         if(searchText.isEmpty()) return
         viewModel.itunesPodcastSearcher(searchText)
     }

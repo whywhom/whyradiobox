@@ -72,66 +72,66 @@
                 android:orientation="horizontal"
                 android:weightSum="4">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
                     android:padding="16dp">
 
                     <ImageView
                         android:id="@+id/iv_bbc"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
+                        android:layout_centerInParent="true"
                         android:background="@drawable/circle_bg"
                         android:padding="15dp"
-                        android:src="@drawable/ic_panda" />
+                        android:contentDescription="@string/podcast_bbc" />
 
                     <TextView
                         android:id="@+id/tv_bbc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:focusable="false"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:text="@string/podcast_bbc"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/item_size_small" />
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
                     android:padding="16dp">
 
                     <ImageView
                         android:id="@+id/iv_cnn"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
+                        android:layout_centerInParent="true"
                         android:background="@drawable/circle_bg"
                         android:padding="15dp"
-                        android:src="@drawable/ic_abc" />
+                        android:contentDescription="@string/podcast_cnn" />
 
                     <TextView
                         android:id="@+id/tv_cnn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:focusable="false"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:text="@string/podcast_cnn"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/item_size_small" />
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
                     android:padding="16dp">
 
                     <ImageView
@@ -140,25 +140,26 @@
                         android:layout_height="48dp"
                         android:background="@drawable/circle_bg"
                         android:padding="15dp"
-                        android:src="@drawable/ic_abc" />
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@string/podcast_voa"/>
 
                     <TextView
                         android:id="@+id/tv_voa"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:focusable="false"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:text="@string/podcast_voa"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/item_size_small" />
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
                     android:padding="16dp">
 
                     <ImageView
@@ -167,18 +168,21 @@
                         android:layout_height="48dp"
                         android:background="@drawable/circle_bg"
                         android:padding="15dp"
-                        android:src="@drawable/ic_best" />
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@string/recommend"/>
 
                     <TextView
                         android:id="@+id/tv_recommend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:focusable="false"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:text="@string/recommend"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/item_size_small" />
-                </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -188,6 +192,59 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                    <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/discover"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="18sp"/>
+
+                    <Button
+                        android:id="@+id/discover_more_en"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:text="@string/discover_more"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+                <com.whywhom.soft.whyradiobox.view.WrappingGridView
+                    android:id="@+id/grid_view_en"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:numColumns="4"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1"
+                    android:scrollbars="none"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="10dp"
             app:cardCornerRadius="4dp"
             app:cardElevation="4dp">
             <LinearLayout
@@ -233,56 +290,5 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="10dp"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="4dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                    <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="0dip"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_weight="1"
-                        android:text="@string/top_en"
-                        android:textColor="?android:attr/textColorPrimary"
-                        android:textSize="18sp"/>
-
-                    <Button
-                        android:id="@+id/discover_more_en"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp"
-                        android:text="@string/discover_more"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-                <com.whywhom.soft.whyradiobox.view.WrappingGridView
-                    android:id="@+id/grid_view_en"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:numColumns="4"
-                    app:layout_columnWeight="1"
-                    app:layout_rowWeight="1"
-                    android:scrollbars="none"
-                    android:layout_marginTop="8dp"
-                    android:layout_gravity="center_horizontal"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </ScrollView>

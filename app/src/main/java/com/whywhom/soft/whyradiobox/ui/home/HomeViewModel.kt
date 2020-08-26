@@ -3,18 +3,15 @@ package com.whywhom.soft.whyradiobox.ui.home
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.whywhom.soft.whyradiobox.data.HttpRepository
 import com.whywhom.soft.whyradiobox.data.RBRepository
 import com.whywhom.soft.whyradiobox.model.ItunesPodcastSearcher
 import com.whywhom.soft.whyradiobox.model.ItunesSearchPodcast
-import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.ui.BaseViewModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
 

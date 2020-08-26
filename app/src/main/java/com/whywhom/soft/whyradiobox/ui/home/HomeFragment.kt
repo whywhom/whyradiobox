@@ -13,6 +13,7 @@ import com.whywhom.soft.whyradiobox.event.RefreshEvent
 import com.whywhom.soft.whyradiobox.model.Entry
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.ui.BaseFragment
+import com.whywhom.soft.whyradiobox.ui.main.HostActivity
 import com.whywhom.soft.whyradiobox.utils.Constants
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -82,6 +83,7 @@ class HomeFragment : BaseFragment(), AdapterView.OnItemClickListener{
         iv_voa.setOnClickListener { onClick->
             viewModel.getJsonDataFromAsset(context!!, "VOA")
         }
+        combinedFeedSearchBox.setOnClickListener { view->performSearch() }
     }
 
     private fun initObserve(){
@@ -134,7 +136,6 @@ class HomeFragment : BaseFragment(), AdapterView.OnItemClickListener{
         when(item.itemId){
             R.id.search -> {
                 Log.d("HomeFragment", "click search")
-//                findNavController(this).navigate(R.id.onlineSearchFragment)
                 return true
             }
         }
@@ -143,5 +144,16 @@ class HomeFragment : BaseFragment(), AdapterView.OnItemClickListener{
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
+    }
+    private fun performSearch() {
+        val query = combinedFeedSearchBox.text.toString()
+        if (query.matches(Regex("http[s]?://.*"))) {
+            return
+        }
+        addUrl(query)
+    }
+    private fun addUrl(query: String) {
+        val intent = HostActivity.newIntent(this.context!!, "Search", query)
+        startActivity(intent)
     }
 }
