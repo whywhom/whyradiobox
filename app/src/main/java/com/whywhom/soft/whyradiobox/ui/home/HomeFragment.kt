@@ -75,13 +75,13 @@ class HomeFragment : BaseFragment(), AdapterView.OnItemClickListener{
 
     private fun initListener() {
         iv_bbc.setOnClickListener { onClick->
-            viewModel.getJsonDataFromAsset(context!!, "BBC")
+            displayAssets("Assets:BBC")
         }
         iv_cnn.setOnClickListener { onClick->
-            viewModel.getJsonDataFromAsset(context!!, "CNN")
+            displayAssets("Assets:CNN")
         }
         iv_voa.setOnClickListener { onClick->
-            viewModel.getJsonDataFromAsset(context!!, "VOA")
+            displayAssets("Assets:VOA")
         }
         combinedFeedSearchBox.setOnClickListener { view->performSearch() }
     }
@@ -110,15 +110,7 @@ class HomeFragment : BaseFragment(), AdapterView.OnItemClickListener{
                 topEnAdapter.updateData(topEn)
             }
         })
-        viewModel.podcastBbcLiveData.observe(viewLifecycleOwner, Observer {
-            var item = it?.results;
-        })
-        viewModel.podcastCnnLiveData.observe(viewLifecycleOwner, Observer {
-            var item = it?.results;
-        })
-        viewModel.podcastVoaLiveData.observe(viewLifecycleOwner, Observer {
-            var item = it?.results;
-        })
+
     }
     override fun onMessageEvent(messageEvent: MessageEvent) {
         super.onMessageEvent(messageEvent)
@@ -154,6 +146,10 @@ class HomeFragment : BaseFragment(), AdapterView.OnItemClickListener{
     }
     private fun addUrl(query: String) {
         val intent = HostActivity.newIntent(this.context!!, "Search", query)
+        startActivity(intent)
+    }
+    private fun displayAssets(path: String) {
+        val intent = HostActivity.newIntent(this.context!!, "Assets", path)
         startActivity(intent)
     }
 }

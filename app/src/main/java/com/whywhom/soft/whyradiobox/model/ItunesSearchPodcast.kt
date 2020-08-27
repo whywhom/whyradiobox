@@ -5,10 +5,10 @@ package com.whywhom.soft.whyradiobox.model
  */
 data class ItunesSearchPodcast(
     val resultCount: Int,
-    val results: List<Result>
+    val results: List<SearchResult>
 )
 
-data class Result(
+data class SearchResult(
     val artistId: Int,
     val artistName: String,
     val artistViewUrl: String,

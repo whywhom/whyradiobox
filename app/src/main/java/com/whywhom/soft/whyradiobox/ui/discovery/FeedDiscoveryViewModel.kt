@@ -1,24 +1,78 @@
 package com.whywhom.soft.whyradiobox.ui.discovery
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
+import com.whywhom.soft.whyradiobox.model.ItunesSearchPodcast
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
+import com.whywhom.soft.whyradiobox.model.SearchResult
+import com.whywhom.soft.whyradiobox.ui.BaseViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class FeedDiscoveryViewModel : ViewModel() {
-    private var podcastList: ArrayList<PodcastSearchResult> = ArrayList(0)
-    var podcastListLiveData = MutableLiveData<ArrayList<PodcastSearchResult>>()
+class FeedDiscoveryViewModel : BaseViewModel() {
+    private var podcastList: ArrayList<SearchResult> = ArrayList(0)
+    var podcastListLiveData = MutableLiveData<ArrayList<SearchResult>>()
+    var podcastCnnLiveData = MutableLiveData<ItunesSearchPodcast>()
+    var podcastBbcLiveData = MutableLiveData<ItunesSearchPodcast>()
+    var podcastVoaLiveData = MutableLiveData<ItunesSearchPodcast>()
+
+    fun getJsonDataFromAsset(context: Context, media: String) {
+        launch(Dispatchers.IO) {
+            val jsonString: String
+            var gson = Gson()
+            try {
+                when (media) {
+                    "Assets:CNN" -> {
+                        jsonString =
+                            context.assets.open("cnn.json").bufferedReader().use { it.readText() }
+                        podcastCnnLiveData.postValue(
+                            gson.fromJson(
+                                jsonString,
+                                ItunesSearchPodcast::class.java
+                            )
+                        )
+                    }
+                    "Assets:BBC" -> {
+                        jsonString =
+                            context.assets.open("bbc.json").bufferedReader().use { it.readText() }
+                        podcastBbcLiveData.postValue(
+                            gson.fromJson(
+                                jsonString,
+                                ItunesSearchPodcast::class.java
+                            )
+                        )
+                    }
+                    "Assets:VOA" -> {
+                        jsonString =
+                            context.assets.open("voa.json").bufferedReader().use { it.readText() }
+                        podcastVoaLiveData.postValue(
+                            gson.fromJson(
+                                jsonString,
+                                ItunesSearchPodcast::class.java
+                            )
+                        )
+                    }
+                }
+            } catch (ioException: IOException) {
+                ioException.printStackTrace()
+            }
+        }
+    }
 
     fun getTopPodcastList(searchType: Int) {
         var country: String = Locale.getDefault().getCountry().decapitalize().toUpperCase()
-        if(searchType == FeedDiscoveryFragment.TYPE_EN){
-            country = "US"
-        }
-        if(searchType == FeedDiscoveryFragment.TYPE_CN){
-            country = "CN"
-        }
+//        if(searchType == FeedDiscoveryFragment.TYPE_EN){
+//            country = "US"
+//        }
+//        if(searchType == FeedDiscoveryFragment.TYPE_CN){
+//            country = "CN"
+//        }
         podcastList.clear()
 //        NetworkModule.provideRetrofitService()
 //            .getTopList(country,"50").enqueue(

@@ -1,6 +1,7 @@
 package com.whywhom.soft.whyradiobox.data
 
 import com.whywhom.soft.whyradiobox.model.ItunesPodcastSearcher
+import com.whywhom.soft.whyradiobox.model.ItunesSearchPodcast
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -13,7 +14,7 @@ import retrofit2.http.Query
  */
 interface NetworkApiService {
     @GET("search?media=podcast")
-    fun search(@Query("term") artist: String): Call<ResponseBody>
+    fun search(@Query("term") artist: String): Deferred<ItunesSearchPodcast>
 
     @GET("/{lang}/rss/toppodcasts/limit={limit}/explicit=true/json")
     fun getTopList(@Path("lang") user:String, @Path("limit") limit:String): Deferred<ItunesPodcastSearcher>

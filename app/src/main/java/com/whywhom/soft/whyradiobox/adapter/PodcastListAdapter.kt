@@ -12,11 +12,12 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
+import com.whywhom.soft.whyradiobox.model.SearchResult
 
-class PodcastListAdapter(podcastList: ArrayList<PodcastSearchResult>, val context: Context?) :
+class PodcastListAdapter(podcastList: ArrayList<SearchResult>, val context: Context?) :
 RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     lateinit var itemListener: ItemClickListenter
-    lateinit var items:ArrayList<PodcastSearchResult>
+    lateinit var items:ArrayList<SearchResult>
     init{
         this.items = podcastList
     }
@@ -24,7 +25,7 @@ RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         itemListener = listener
     }
 
-    fun submitList(list: ArrayList<PodcastSearchResult>) {
+    fun submitList(list: ArrayList<SearchResult>) {
         this.items = list
     }
 
@@ -42,15 +43,15 @@ RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ViewHolder) {
             var item = items.get(position)
-            var profilePicURL: String? = item.imageUrl
+            var profilePicURL: String? = item.artworkUrl100
             val request: RequestCreator =
                 Picasso.get().load(profilePicURL).placeholder(R.drawable.rss_64)
             request.fit()
                 .centerCrop()
                 .into(holder.podcastThumbnail)
-            var name = item.title
+            var name = item.trackName
             holder.podcastName.text = name
-            holder.podcastAuthor.text = if(item.author.isNullOrEmpty()) "" else item.author
+            holder.podcastAuthor.text = if(item.artistName.isNullOrEmpty()) "" else item.artistName
             holder.podcastItem.setOnClickListener(View.OnClickListener {
                 itemListener.onItemClicked(position)
             })

@@ -16,6 +16,7 @@ import com.whywhom.soft.whyradiobox.adapter.PodcastListAdapter
 import com.whywhom.soft.whyradiobox.extensions.setListener
 import com.whywhom.soft.whyradiobox.interfaces.RecyclerListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
+import com.whywhom.soft.whyradiobox.model.SearchResult
 import com.whywhom.soft.whyradiobox.utils.KeyboardUtils
 import kotlinx.android.synthetic.main.app_bar_main_drawer.*
 import kotlinx.android.synthetic.main.fragment_add_feed.*
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_add_feed.*
 
 class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
     private var mSearchView: SearchView? = null
-    var podcastList:ArrayList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
+    var podcastList:ArrayList<SearchResult> = ArrayList<SearchResult>()
     companion object {
         private lateinit var queryStr: String
         fun newInstance(query: String):Fragment{
@@ -68,8 +69,7 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
             }
         })
         viewModel.podcastListLiveData.observe(viewLifecycleOwner, Observer { it ->
-            var len = it.size
-            podcastList = it
+            podcastList = it.results as ArrayList<SearchResult>
             adapter.submitList(podcastList)
             adapter.notifyDataSetChanged()
             swipeRefreshLayout.setRefreshing(false);
@@ -124,8 +124,9 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         //设置搜索框直接展开显示。左侧有无放大镜(在搜索框中) 右侧无叉叉 有输入内容后有叉叉 不能关闭搜索框
         mSearchView!!.onActionViewExpanded();
         mSearchView!!.queryHint = getString(R.string.search_podcast_hint)
-        val mSearchEditView: SearchAutoComplete = mSearchView!!.findViewById(R.id.search_src_text)
-        mSearchEditView!!.setHintTextColor(getResources().getColor(R.color.white));
+        //modify SearchView property
+//        val mSearchEditView: SearchAutoComplete = mSearchView!!.findViewById(R.id.search_src_text)
+//        mSearchEditView!!.setHintTextColor(getResources().getColor(R.color.white));
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -149,9 +150,9 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
             return
         }
         var bundle : Bundle = Bundle()
-        bundle.putString("title", entry.title!!)
+        bundle.putString("title", entry.artistName!!)
         bundle.putString("feed_url", entry.feedUrl!!)
-        bundle.putString("feed_cover_url", entry.imageUrl!!)
-//        NavHostFragment.findNavController(this).navigate(R.id.onlineFeedViewFragment, bundle)
+        bundle.putString("feed_cover_url", entry.artworkUrl100!!)
+
     }
 }

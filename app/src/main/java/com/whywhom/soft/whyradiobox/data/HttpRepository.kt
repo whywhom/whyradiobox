@@ -94,5 +94,6 @@ private fun getApiService(): NetworkApiService {
     private fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor()
         .apply { level = HttpLoggingInterceptor.Level.BODY }
 
-    fun getTopList(lang:String, limit:String) = getApiService().getTopList(lang, limit);
+    fun getTopList(lang:String, limit:String) = getApiService().getTopList(lang, limit)
+    fun search(artist: String) = getApiService().search(artist)
 }

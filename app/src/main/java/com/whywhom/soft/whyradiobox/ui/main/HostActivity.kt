@@ -6,21 +6,21 @@ import android.os.Bundle
 import android.view.MenuItem
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.ui.BaseActivity
+import com.whywhom.soft.whyradiobox.ui.discovery.FeedDiscoveryFragment
 import com.whywhom.soft.whyradiobox.ui.search.OnlineSearchFragment
-import kotlinx.android.synthetic.main.activity_host.*
 
 class HostActivity : BaseActivity() {
 
     companion object{
         private var fragmentType: String = ""
-        private lateinit var query: String
+        private lateinit var action: String
         private lateinit var podcastTitle: String
         fun newIntent(
             context: Context,
             type: String,
             item: String
         ): Intent {
-            query = item
+            action = item
             fragmentType = type
             return Intent(context, HostActivity::class.java)
         }
@@ -33,10 +33,13 @@ class HostActivity : BaseActivity() {
             supportFragmentManager.beginTransaction().apply {
                 when(fragmentType) {
                     "Search"-> {
-                        replace(R.id.container, OnlineSearchFragment.newInstance(query))
+                        replace(R.id.container, OnlineSearchFragment.newInstance(action))
+                    }
+                    "Assets"->{
+                        replace(R.id.container, FeedDiscoveryFragment.newInstance(action))
                     }
                     else-> {
-                        replace(R.id.container, OnlineSearchFragment.newInstance(query))
+                        replace(R.id.container, OnlineSearchFragment.newInstance(action))
                     }
                 }
                 commitNow()

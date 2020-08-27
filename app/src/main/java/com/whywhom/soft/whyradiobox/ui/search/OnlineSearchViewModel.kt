@@ -1,42 +1,31 @@
 package com.whywhom.soft.whyradiobox.ui.search
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.whywhom.soft.whyradiobox.data.HttpRepository
+import com.whywhom.soft.whyradiobox.model.ItunesSearchPodcast
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
+import com.whywhom.soft.whyradiobox.ui.BaseViewModel
+import com.whywhom.soft.whyradiobox.ui.home.HomeViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 
-class OnlineSearchViewModel : ViewModel() {
-    private var podcastList: ArrayList<PodcastSearchResult> = ArrayList(0)
-    var podcastListLiveData = MutableLiveData<ArrayList<PodcastSearchResult>>()
+class OnlineSearchViewModel : BaseViewModel() {
+    var podcastListLiveData = MutableLiveData<ItunesSearchPodcast>()
     fun itunesPodcastSearcher(searchText: String) {
-//        NetworkModule.provideRetrofitService().search(searchText).enqueue(
-//            object : retrofit2.Callback<ResponseBody> {
-//                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-//                    var throwable = t
-//                    podcastList.clear()
-//                    podcastListLiveData.postValue(podcastList)
-//                }
-//                override fun onResponse(
-//                    call: Call<ResponseBody>,
-//                    response: Response<ResponseBody>
-//                ) {
-//                    if (response.isSuccessful) {
-//                        val resultString = response.body()!!.string()
-//                        val result = JSONObject(resultString)
-//                        val j = result.getJSONArray("results")
-//                        podcastList.clear()
-//                        for (i in 0 until j.length()) {
-//                            val podcastJson = j.getJSONObject(i)
-//                            val podcast =
-//                                PodcastSearchResult.fromItunes(podcastJson)
-//                            podcastList.add(podcast)
-//                        }
-//                    } else {
-//                        podcastList.clear()
-//                    }
-//                    podcastListLiveData.postValue(podcastList)
-//                }
-//
-//            }
-//        )
+        launchOnUITryCatch(
+            {
+                val searchResult = async(Dispatchers.IO) { HttpRepository.search(searchText) }.await()
+                podcastListLiveData.postValue(searchResult.await())
+
+            },
+            {
+                Log.i(HomeViewModel::class.java.simpleName, "${it.message}")
+            },
+            {
+                Log.i(HomeViewModel::class.java.simpleName, "finally")
+            },
+            true)
     }
 }
