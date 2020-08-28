@@ -13,19 +13,22 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.adapter.PodcastListAdapter
+import com.whywhom.soft.whyradiobox.event.FragmentEvent
 import com.whywhom.soft.whyradiobox.extensions.setListener
 import com.whywhom.soft.whyradiobox.interfaces.RecyclerListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.model.SearchResult
+import com.whywhom.soft.whyradiobox.ui.BaseFragment
 import com.whywhom.soft.whyradiobox.ui.discovery.FeedDiscoveryFragment
 import com.whywhom.soft.whyradiobox.ui.main.HostActivity
 import com.whywhom.soft.whyradiobox.ui.main.OnlineFeedViewFragment
 import com.whywhom.soft.whyradiobox.utils.KeyboardUtils
 import kotlinx.android.synthetic.main.app_bar_main_drawer.*
 import kotlinx.android.synthetic.main.fragment_discovery_feed.*
+import org.greenrobot.eventbus.EventBus
 
 
-class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
+class OnlineSearchFragment : BaseFragment(), PodcastListAdapter.ItemClickListenter {
     private var mSearchView: SearchView? = null
     var podcastList:ArrayList<SearchResult> = ArrayList<SearchResult>()
     companion object {
@@ -154,6 +157,6 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         if (entry.feedUrl == null) {
             return
         }
-        (activity as HostActivity).showDetailFragment(entry.feedUrl!!, entry.artworkUrl100!!)
+        EventBus.getDefault().post(FragmentEvent(HostActivity::class.java, entry))
     }
 }

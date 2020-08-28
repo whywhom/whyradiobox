@@ -25,6 +25,8 @@ import com.whywhom.soft.whyradiobox.interfaces.OnPlayListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.rss.RSSFeed
 import com.whywhom.soft.whyradiobox.rss.RSSItem
+import com.whywhom.soft.whyradiobox.ui.BaseActivity
+import com.whywhom.soft.whyradiobox.ui.BaseFragment
 import com.whywhom.soft.whyradiobox.ui.detail.OnlineFeedViewModel
 import com.whywhom.soft.whyradiobox.ui.subscribedetail.SubscribeDetailActivity
 import com.whywhom.soft.whyradiobox.utils.PlayerUtil
@@ -32,7 +34,7 @@ import kotlinx.android.synthetic.main.app_bar_main_drawer.*
 import kotlinx.android.synthetic.main.fragment_rss_detail.*
 
 
-class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.RssInterface {
+class OnlineFeedViewFragment : BaseFragment(), OnPlayListener, OnlineFeedViewModel.RssInterface {
 
     private lateinit var playerNotificationManager: PlayerNotificationManager
     private val PLAYBACK_CHANNEL_ID = "playback_channel"

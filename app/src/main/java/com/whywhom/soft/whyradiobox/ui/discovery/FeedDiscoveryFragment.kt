@@ -13,6 +13,7 @@ import com.whywhom.soft.whyradiobox.event.RefreshEvent
 import com.whywhom.soft.whyradiobox.extensions.setListener
 import com.whywhom.soft.whyradiobox.interfaces.RecyclerListener
 import com.whywhom.soft.whyradiobox.model.SearchResult
+import com.whywhom.soft.whyradiobox.ui.BaseFragment
 import com.whywhom.soft.whyradiobox.ui.home.HomeFragment
 import com.whywhom.soft.whyradiobox.ui.main.HostActivity
 import com.whywhom.soft.whyradiobox.ui.main.OnlineFeedViewFragment
@@ -20,8 +21,7 @@ import kotlinx.android.synthetic.main.fragment_discovery_feed.*
 import org.greenrobot.eventbus.EventBus
 
 
-class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
-    private var title :String = "";
+class FeedDiscoveryFragment : BaseFragment(), PodcastListAdapter.ItemClickListenter {
     var podcastList:ArrayList<SearchResult> = ArrayList<SearchResult>()
     companion object {
         val TAG: String = "FeedDiscoveryFragment"
@@ -44,11 +44,6 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(false)//想让Fragment中的onCreateOptionsMenu生效必须先调用setHasOptionsMenu方法，否则Toolbar没有菜单。
         super.onViewCreated(view, savedInstanceState)
-        val bundle = savedInstanceState ?: arguments
-//        if(bundle != null){
-//            searchType = bundle.getInt("search_type")
-//            title = bundle.getString("search_title","")
-//        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -65,7 +60,6 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
             }
             override fun refresh() {
                 swipeRefreshLayout.setRefreshing(true)
-//                viewModel.getTopPodcastList(searchType)
                 viewModel.getJsonDataFromAsset(context!!, actionStr)
             }
         })
@@ -91,7 +85,7 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
             swipeRefreshLayout.setRefreshing(true)
             viewModel.getJsonDataFromAsset(context!!, actionStr)
         }
-//        swipeRefreshLayout.setEnabled(false);//设置为不能刷新
+        swipeRefreshLayout.setEnabled(false);//设置为不能刷新
     }
 
     private fun initToolbar() {
@@ -105,7 +99,6 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu, menu)
-//        setupSearch(menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -114,19 +107,6 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
         if (entry.feedUrl == null) {
             return
         }
-//        val intent = PodcastDetailActivity.newIntent(this.context, entry.feedUrl)
-//        startActivity(intent)
-        var bundle : Bundle = Bundle()
-        bundle.putString("title", entry.artistName!!)
-        bundle.putString("feed_url", entry.feedUrl!!)
-        bundle.putString("feed_cover_url", entry.artworkUrl100!!)
-//        EventBus.getDefault().post(FragmentEvent(HostActivity::class.java))
-        (activity as HostActivity).showDetailFragment(entry.feedUrl!!, entry.artworkUrl100!!)
-//        activity?.supportFragmentManager?.beginTransaction()?.apply {
-//            add(OnlineFeedViewFragment.newInstance(context,entry.feedUrl!!, entry.artworkUrl100!!),"OnlineFeedViewFragment")
-//            hide(this@FeedDiscoveryFragment)
-//            addToBackStack(null)
-//            commit()
-//        }
+        EventBus.getDefault().post(FragmentEvent(HostActivity::class.java, entry))
     }
 }
