@@ -75,13 +75,13 @@ class HomeFragment : BaseFragment(), AdapterView.OnItemClickListener{
 
     private fun initListener() {
         iv_bbc.setOnClickListener { onClick->
-            displayAssets("Assets:BBC")
+            displayAssets("BBC")
         }
         iv_cnn.setOnClickListener { onClick->
-            displayAssets("Assets:CNN")
+            displayAssets("CNN")
         }
         iv_voa.setOnClickListener { onClick->
-            displayAssets("Assets:VOA")
+            displayAssets("VOA")
         }
         combinedFeedSearchBox.setOnClickListener { view->performSearch() }
     }

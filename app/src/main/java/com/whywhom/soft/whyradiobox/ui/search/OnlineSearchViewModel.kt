@@ -21,10 +21,10 @@ class OnlineSearchViewModel : BaseViewModel() {
 
             },
             {
-                Log.i(HomeViewModel::class.java.simpleName, "${it.message}")
+                Log.i(OnlineSearchViewModel::class.java.simpleName, "${it.message}")
             },
             {
-                Log.i(HomeViewModel::class.java.simpleName, "finally")
+                Log.i(OnlineSearchViewModel::class.java.simpleName, "finally")
             },
             true)
     }

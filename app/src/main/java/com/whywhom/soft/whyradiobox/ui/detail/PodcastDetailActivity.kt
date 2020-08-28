@@ -10,7 +10,7 @@ import com.whywhom.soft.whyradiobox.ui.main.OnlineFeedViewFragment
 
 class PodcastDetailActivity : AppCompatActivity() {
     private lateinit var fragment: OnlineFeedViewFragment
-
+    private var coverUrl = ""
     companion object {
         private var itemInfo: String? = ""
         private val INTENT_USER_ID = "user_id"
@@ -25,7 +25,7 @@ class PodcastDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         if (savedInstanceState == null) {
-            fragment = OnlineFeedViewFragment.newInstance(this, itemInfo)
+            fragment = OnlineFeedViewFragment.newInstance(this, itemInfo, coverUrl)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commitNow()

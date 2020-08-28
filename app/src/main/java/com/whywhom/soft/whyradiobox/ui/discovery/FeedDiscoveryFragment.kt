@@ -8,12 +8,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.adapter.PodcastListAdapter
+import com.whywhom.soft.whyradiobox.event.FragmentEvent
+import com.whywhom.soft.whyradiobox.event.RefreshEvent
 import com.whywhom.soft.whyradiobox.extensions.setListener
 import com.whywhom.soft.whyradiobox.interfaces.RecyclerListener
 import com.whywhom.soft.whyradiobox.model.SearchResult
-import com.whywhom.soft.whyradiobox.ui.search.OnlineSearchFragment
-import kotlinx.android.synthetic.main.app_bar_main_drawer.*
-import kotlinx.android.synthetic.main.fragment_add_feed.*
+import com.whywhom.soft.whyradiobox.ui.home.HomeFragment
+import com.whywhom.soft.whyradiobox.ui.main.HostActivity
+import com.whywhom.soft.whyradiobox.ui.main.OnlineFeedViewFragment
+import kotlinx.android.synthetic.main.fragment_discovery_feed.*
+import org.greenrobot.eventbus.EventBus
 
 
 class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
@@ -34,7 +38,7 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_add_feed, container, false)
+        return inflater.inflate(R.layout.fragment_discovery_feed, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,8 +54,8 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(FeedDiscoveryViewModel::class.java)
-//        activity!!.toolbar!!.title = title
-        val adapter = PodcastListAdapter(podcastList,context)
+        initToolbar()
+        val adapter = PodcastListAdapter(podcastList, context)
         adapter.setOnItemClick(this)
         podcast_list.layoutManager = LinearLayoutManager(activity)
         podcast_list.adapter = adapter
@@ -65,36 +69,38 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
                 viewModel.getJsonDataFromAsset(context!!, actionStr)
             }
         })
-        viewModel.podcastListLiveData.observe(viewLifecycleOwner, Observer { it->
-            var len = it.size
-            podcastList = it
+        viewModel.podcastBbcLiveData.observe(viewLifecycleOwner, Observer {
+            podcastList = it?.results as ArrayList<SearchResult>;
             adapter.submitList(podcastList)
             adapter.notifyDataSetChanged()
             swipeRefreshLayout.setRefreshing(false);
         })
-        viewModel.podcastBbcLiveData.observe(viewLifecycleOwner, Observer {
-            var item = it?.results;
-            adapter.submitList(item as ArrayList<SearchResult>)
-            adapter.notifyDataSetChanged()
-            swipeRefreshLayout.setRefreshing(false);
-        })
         viewModel.podcastCnnLiveData.observe(viewLifecycleOwner, Observer {
-            var item = it?.results;
-            adapter.submitList(item as ArrayList<SearchResult>)
+            podcastList = it?.results as ArrayList<SearchResult>;
+            adapter.submitList(podcastList)
             adapter.notifyDataSetChanged()
             swipeRefreshLayout.setRefreshing(false);
         })
         viewModel.podcastVoaLiveData.observe(viewLifecycleOwner, Observer {
-            var item = it?.results;
-            adapter.submitList(item as ArrayList<SearchResult>)
+            podcastList = it?.results as ArrayList<SearchResult>;
+            adapter.submitList(podcastList)
             adapter.notifyDataSetChanged()
             swipeRefreshLayout.setRefreshing(false);
         })
-        swipeRefreshLayout.post(Runnable {
+        swipeRefreshLayout.post {
             swipeRefreshLayout.setRefreshing(true)
             viewModel.getJsonDataFromAsset(context!!, actionStr)
-        })
+        }
 //        swipeRefreshLayout.setEnabled(false);//设置为不能刷新
+    }
+
+    private fun initToolbar() {
+        discovery_toolbar.title = actionStr
+        discovery_toolbar.navigationIcon =
+            getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24, null)
+        discovery_toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -114,6 +120,13 @@ class FeedDiscoveryFragment : Fragment(), PodcastListAdapter.ItemClickListenter 
         bundle.putString("title", entry.artistName!!)
         bundle.putString("feed_url", entry.feedUrl!!)
         bundle.putString("feed_cover_url", entry.artworkUrl100!!)
-//        NavHostFragment.findNavController(this).navigate(R.id.onlineFeedViewFragment, bundle)
+//        EventBus.getDefault().post(FragmentEvent(HostActivity::class.java))
+        (activity as HostActivity).showDetailFragment(entry.feedUrl!!, entry.artworkUrl100!!)
+//        activity?.supportFragmentManager?.beginTransaction()?.apply {
+//            add(OnlineFeedViewFragment.newInstance(context,entry.feedUrl!!, entry.artworkUrl100!!),"OnlineFeedViewFragment")
+//            hide(this@FeedDiscoveryFragment)
+//            addToBackStack(null)
+//            commit()
+//        }
     }
 }

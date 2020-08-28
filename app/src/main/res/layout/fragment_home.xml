@@ -223,7 +223,7 @@
                         android:minWidth="0dp"
                         android:minHeight="0dp"
                         android:text="@string/discover_more"
-                        android:textSize="18sp"/>
+                        android:textSize="14sp"/>
                 </LinearLayout>
                 <com.whywhom.soft.whyradiobox.view.WrappingGridView
                     android:id="@+id/grid_view_en"
@@ -275,7 +275,7 @@
                         android:minWidth="0dp"
                         android:minHeight="0dp"
                         android:text="@string/discover_more"
-                        android:textSize="18sp"/>
+                        android:textSize="14sp"/>
                 </LinearLayout>
                 <com.whywhom.soft.whyradiobox.view.WrappingGridView
                     android:id="@+id/grid_view_cn"

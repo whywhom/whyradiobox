@@ -50,8 +50,9 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
         private var feedUrl: String? = ""
         private var coverUrl:String? =""
         private var title:String = ""
-        fun newInstance(context: Context?, item: String?):OnlineFeedViewFragment{
+        fun newInstance(context: Context?, item: String?, cover: String?):OnlineFeedViewFragment{
             feedUrl = item
+            coverUrl = cover
             return OnlineFeedViewFragment()
         }
     }
@@ -100,7 +101,7 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
         if(feedUrl == null){
 //            findNavController().popBackStack();
         }
-        requireActivity().toolbar!!.title = title
+
         viewModel = ViewModelProvider(this).get(OnlineFeedViewModel::class.java)
         feed_list.layoutManager = LinearLayoutManager(this.context)
         viewModel.feedUrlLiveData.observe(viewLifecycleOwner, Observer { rssFeed->
@@ -111,10 +112,10 @@ class OnlineFeedViewFragment : Fragment(), OnPlayListener, OnlineFeedViewModel.R
             }
             swipeRefreshLayout.isRefreshing = false;
         })
-        swipeRefreshLayout.post(Runnable {
+        swipeRefreshLayout.post {
             swipeRefreshLayout.isRefreshing = true
-            viewModel.getItemFeedUrl(feedUrl!!,coverUrl)
-        })
+            viewModel.getItemFeedUrl(feedUrl!!, coverUrl)
+        }
         swipeRefreshLayout.setEnabled(false);//设置为不能刷新
     }
 

@@ -51,6 +51,7 @@ RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 .into(holder.podcastThumbnail)
             var name = item.trackName
             holder.podcastName.text = name
+            holder.podcastUrl.text = item.feedUrl
             holder.podcastAuthor.text = if(item.artistName.isNullOrEmpty()) "" else item.artistName
             holder.podcastItem.setOnClickListener(View.OnClickListener {
                 itemListener.onItemClicked(position)
@@ -66,6 +67,7 @@ RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         var podcastName : TextView = view.findViewById(R.id.itemName)
         var podcastAuthor : TextView = view.findViewById(R.id.itemAuthor)
         var podcastItem : LinearLayout = view.findViewById(R.id.itemContent)
+        var podcastUrl : TextView = view.findViewById(R.id.itemUrl)
     }
     interface ItemClickListenter {
         fun onItemClicked(position:Int)

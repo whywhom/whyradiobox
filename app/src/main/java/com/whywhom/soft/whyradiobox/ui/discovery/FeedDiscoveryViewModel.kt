@@ -16,8 +16,6 @@ import kotlin.collections.ArrayList
 
 
 class FeedDiscoveryViewModel : BaseViewModel() {
-    private var podcastList: ArrayList<SearchResult> = ArrayList(0)
-    var podcastListLiveData = MutableLiveData<ArrayList<SearchResult>>()
     var podcastCnnLiveData = MutableLiveData<ItunesSearchPodcast>()
     var podcastBbcLiveData = MutableLiveData<ItunesSearchPodcast>()
     var podcastVoaLiveData = MutableLiveData<ItunesSearchPodcast>()
@@ -28,7 +26,7 @@ class FeedDiscoveryViewModel : BaseViewModel() {
             var gson = Gson()
             try {
                 when (media) {
-                    "Assets:CNN" -> {
+                    "CNN" -> {
                         jsonString =
                             context.assets.open("cnn.json").bufferedReader().use { it.readText() }
                         podcastCnnLiveData.postValue(
@@ -38,7 +36,7 @@ class FeedDiscoveryViewModel : BaseViewModel() {
                             )
                         )
                     }
-                    "Assets:BBC" -> {
+                    "BBC" -> {
                         jsonString =
                             context.assets.open("bbc.json").bufferedReader().use { it.readText() }
                         podcastBbcLiveData.postValue(
@@ -48,7 +46,7 @@ class FeedDiscoveryViewModel : BaseViewModel() {
                             )
                         )
                     }
-                    "Assets:VOA" -> {
+                    "VOA" -> {
                         jsonString =
                             context.assets.open("voa.json").bufferedReader().use { it.readText() }
                         podcastVoaLiveData.postValue(
@@ -63,44 +61,6 @@ class FeedDiscoveryViewModel : BaseViewModel() {
                 ioException.printStackTrace()
             }
         }
-    }
-
-    fun getTopPodcastList(searchType: Int) {
-        var country: String = Locale.getDefault().getCountry().decapitalize().toUpperCase()
-//        if(searchType == FeedDiscoveryFragment.TYPE_EN){
-//            country = "US"
-//        }
-//        if(searchType == FeedDiscoveryFragment.TYPE_CN){
-//            country = "CN"
-//        }
-        podcastList.clear()
-//        NetworkModule.provideRetrofitService()
-//            .getTopList(country,"50").enqueue(
-//                object : retrofit2.Callback<ResponseBody> {
-//                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-//                        var throwable = t
-//                        podcastList.clear()
-//                        podcastListLiveData.postValue(podcastList)
-//                    }
-//                    override fun onResponse(
-//                        call: Call<ResponseBody>,
-//                        response: Response<ResponseBody>) {
-//                        var rsp = response.body()!!.string()
-//                        val result = JSONObject(rsp)
-//                        val feed: JSONObject = result.getJSONObject("feed")
-//                        val entries = feed.getJSONArray("entry")
-//                        var itunesPodcastSearcher: ItunesPodcastSearcher =
-//                        Gson().fromJson(rsp,ItunesPodcastSearcher::class.java)
-//                        var i = 0
-//                        for (i in 0 until entries.length()) {
-//                            val json = entries.getJSONObject(i)
-//                            podcastList.add(PodcastSearchResult.fromItunesToplist(json));
-//                        }
-//                        podcastListLiveData.postValue(podcastList)
-//                    }
-//
-//                }
-//            )
     }
 
     fun itunesPodcastSearcher(searchText: String) {

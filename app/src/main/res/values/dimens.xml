@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="card_side_margin">12dp</dimen>
+    <dimen name="card_side_margin">8dp</dimen>
     <dimen name="header_margin">10dp</dimen>
     <dimen name="gap">10dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>

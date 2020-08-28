@@ -17,9 +17,12 @@ import com.whywhom.soft.whyradiobox.extensions.setListener
 import com.whywhom.soft.whyradiobox.interfaces.RecyclerListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.model.SearchResult
+import com.whywhom.soft.whyradiobox.ui.discovery.FeedDiscoveryFragment
+import com.whywhom.soft.whyradiobox.ui.main.HostActivity
+import com.whywhom.soft.whyradiobox.ui.main.OnlineFeedViewFragment
 import com.whywhom.soft.whyradiobox.utils.KeyboardUtils
 import kotlinx.android.synthetic.main.app_bar_main_drawer.*
-import kotlinx.android.synthetic.main.fragment_add_feed.*
+import kotlinx.android.synthetic.main.fragment_discovery_feed.*
 
 
 class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
@@ -81,6 +84,7 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         toolbar?.title = ""
         toolbar.navigationIcon =
             getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24, null)
+        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
         toolbar.inflateMenu(R.menu.menu_search);
         setupSearch(toolbar.menu)
     }
@@ -141,6 +145,7 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
     fun searchQueryChanged(searchText: String) {
         Log.d("OnlineSearchFragment", "searchQueryChanged() get " + searchText)
         if(searchText.isEmpty()) return
+        swipeRefreshLayout.setRefreshing(true)
         viewModel.itunesPodcastSearcher(searchText)
     }
 
@@ -149,10 +154,6 @@ class OnlineSearchFragment : Fragment(), PodcastListAdapter.ItemClickListenter {
         if (entry.feedUrl == null) {
             return
         }
-        var bundle : Bundle = Bundle()
-        bundle.putString("title", entry.artistName!!)
-        bundle.putString("feed_url", entry.feedUrl!!)
-        bundle.putString("feed_cover_url", entry.artworkUrl100!!)
-
+        (activity as HostActivity).showDetailFragment(entry.feedUrl!!, entry.artworkUrl100!!)
     }
 }
