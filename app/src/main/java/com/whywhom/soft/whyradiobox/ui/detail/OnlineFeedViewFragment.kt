@@ -1,15 +1,19 @@
 package com.whywhom.soft.whyradiobox.ui.main
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -25,12 +29,11 @@ import com.whywhom.soft.whyradiobox.interfaces.OnPlayListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.rss.RSSFeed
 import com.whywhom.soft.whyradiobox.rss.RSSItem
-import com.whywhom.soft.whyradiobox.ui.BaseActivity
+import com.whywhom.soft.whyradiobox.services.MediaService
 import com.whywhom.soft.whyradiobox.ui.BaseFragment
 import com.whywhom.soft.whyradiobox.ui.detail.OnlineFeedViewModel
 import com.whywhom.soft.whyradiobox.ui.subscribedetail.SubscribeDetailActivity
 import com.whywhom.soft.whyradiobox.utils.PlayerUtil
-import kotlinx.android.synthetic.main.app_bar_main_drawer.*
 import kotlinx.android.synthetic.main.fragment_rss_detail.*
 
 
@@ -149,13 +152,12 @@ class OnlineFeedViewFragment : BaseFragment(), OnPlayListener, OnlineFeedViewMod
                 val data = viewModel.getRss()
                 val intent = SubscribeDetailActivity.newIntent(this.context, data.title, data.rssurl, data.coverurl, data.trackId)
                 startActivity(intent)
-//                findNavController().popBackStack()
             } else {
                 viewModel.subscription(this.requireContext(), this)
             }
         }
 
-        val request: RequestCreator =Picasso.get().load(coverUrl).placeholder(R.drawable.rss_64)
+        val request: RequestCreator =Picasso.get().load(coverUrl).placeholder(R.drawable.rss_96)
         request.fit()
             .centerCrop()
             .into(imgvCover)
@@ -164,35 +166,70 @@ class OnlineFeedViewFragment : BaseFragment(), OnPlayListener, OnlineFeedViewMod
     override fun play(position: Int) {
         var mineType:String = ""
         lateinit var uri:Uri
-        player = PlayerUtil.getPlayer(this.requireContext())
-        if(!player_control_view.isVisible){
-            player_control_view.visibility = View.VISIBLE
-        }
-        if(player!!.isPlaying){
-            player!!.stop()
-        }
-        // Produces DataSource instances through which media data is loaded.
-        if(rssList[position].enclosure != null){
-            mineType = rssList[position].enclosure.mimeType
-            uri = rssList[position].enclosure.url
+        var rssItem = rssList[position]
+//        player = PlayerUtil.getPlayer(this.requireContext())
+//
+//        if(!player_control_view.isVisible){
+//            player_control_view.visibility = View.VISIBLE
+//        }
+//        if(player!!.isPlaying){
+//            player!!.stop()
+//        }
+//        // Produces DataSource instances through which media data is loaded.
+//        if(rssItem.enclosure != null){
+//            mineType = rssItem.enclosure.mimeType
+//            uri = rssItem.enclosure.url
+//        } else{
+//            mineType = Util.getUserAgent(context!!, "RBApplication")
+//            if(rssItem.link != null){
+//                uri = rssItem.link
+//            }
+//        }
+//        var dataSourceFactory: DataSource.Factory =
+//            DefaultDataSourceFactory(this.context, mineType)
+//        // This is the MediaSource representing the media to be played.
+//        mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+//            .createMediaSource(uri)
+//        // Prepare the player with the source.
+//        player!!.playWhenReady = true
+//        player_control_view.player = player
+////        player_control_view.showTimeoutMs = -1
+//        player!!.prepare(mediaSource);
+//        val mediaDescriptionAdapter = object : PlayerNotificationManager.MediaDescriptionAdapter {
+//            override fun getCurrentSubText(player: Player): String? {
+//                return rssItem.description
+//            }
+//
+//            override fun getCurrentContentTitle(player: Player): String {
+//                return rssItem.title
+//            }
+//
+//            override fun createCurrentContentIntent(player: Player): PendingIntent? {
+//                return null
+//            }
+//
+//            override fun getCurrentContentText(player: Player): String {
+//                if(rssItem.getAuthor() != null){
+//                    return rssItem.getAuthor()
+//                }
+//                return ""
+//            }
+//
+//            override fun getCurrentLargeIcon(
+//                player: Player,
+//                callback: PlayerNotificationManager.BitmapCallback
+//            ): Bitmap? {
+//                return null
+//            }
+//        }
+//        this.context?.let { PlayerUtil.initListener(it,mediaDescriptionAdapter) }
+        val intent = Intent(this.context, MediaService::class.java)
+        MediaService.setDataSource(rssItem)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            activity.startForegroundService(intent)
         } else{
-            mineType = Util.getUserAgent(context!!, "RBApplication")
-            if(rssList[position].link != null){
-                uri = rssList[position].link
-            }
+            activity.startService(intent)
         }
-
-        var dataSourceFactory: DataSource.Factory =
-            DefaultDataSourceFactory(this.context, mineType)
-        // This is the MediaSource representing the media to be played.
-        mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(uri)
-        // Prepare the player with the source.
-        player!!.playWhenReady = true
-        player_control_view.player = player
-//        player_control_view.showTimeoutMs = -1
-        player!!.prepare(mediaSource);
-
     }
 
     override fun pause(position: Int) {

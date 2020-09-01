@@ -14,18 +14,18 @@ import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.model.SearchResult
 
-class PodcastListAdapter(podcastList: ArrayList<SearchResult>, val context: Context?) :
+class PodcastListAdapter(podcastList: ArrayList<PodcastSearchResult>, val context: Context?) :
 RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     lateinit var itemListener: ItemClickListenter
-    lateinit var items:ArrayList<SearchResult>
+    lateinit var items:ArrayList<PodcastSearchResult>
     init{
         this.items = podcastList
     }
-    fun setOnItemClick( listener: ItemClickListenter){
+    fun setOnItemClick(listener: ItemClickListenter){
         itemListener = listener
     }
 
-    fun submitList(list: ArrayList<SearchResult>) {
+    fun submitList(list: ArrayList<PodcastSearchResult>) {
         this.items = list
     }
 
@@ -43,16 +43,16 @@ RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ViewHolder) {
             var item = items.get(position)
-            var profilePicURL: String? = item.artworkUrl100
+            var profilePicURL: String? = item.imageUrl
             val request: RequestCreator =
-                Picasso.get().load(profilePicURL).placeholder(R.drawable.rss_64)
+                Picasso.get().load(profilePicURL).placeholder(R.drawable.rss_96)
             request.fit()
                 .centerCrop()
                 .into(holder.podcastThumbnail)
-            var name = item.trackName
+            var name = item.title
             holder.podcastName.text = name
             holder.podcastUrl.text = item.feedUrl
-            holder.podcastAuthor.text = if(item.artistName.isNullOrEmpty()) "" else item.artistName
+            holder.podcastAuthor.text = if(item.author.isNullOrEmpty()) "" else item.author
             holder.podcastItem.setOnClickListener(View.OnClickListener {
                 itemListener.onItemClicked(position)
             })

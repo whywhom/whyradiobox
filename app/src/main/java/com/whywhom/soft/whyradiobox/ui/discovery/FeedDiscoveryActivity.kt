@@ -1,21 +1,20 @@
-package com.whywhom.soft.whyradiobox.ui.main
+package com.whywhom.soft.whyradiobox.ui.discovery
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.SearchEvent
 import androidx.fragment.app.Fragment
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.event.FragmentEvent
 import com.whywhom.soft.whyradiobox.event.MessageEvent
+import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.model.SearchResult
 import com.whywhom.soft.whyradiobox.ui.BaseActivity
 import com.whywhom.soft.whyradiobox.ui.detail.OnlineFeedViewActivity
-import com.whywhom.soft.whyradiobox.ui.discovery.FeedDiscoveryFragment
 import com.whywhom.soft.whyradiobox.ui.search.OnlineSearchFragment
 
-class HostActivity : BaseActivity() {
+class FeedDiscoveryActivity : BaseActivity() {
     lateinit var currentFragment: Fragment
     companion object{
         private var fragmentType: String = ""
@@ -28,26 +27,22 @@ class HostActivity : BaseActivity() {
         ): Intent {
             action = item
             fragmentType = type
-            return Intent(context, HostActivity::class.java)
+            return Intent(context, FeedDiscoveryActivity::class.java)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_host)
+        setContentView(R.layout.activity_feed_discovery)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().apply {
                 when(fragmentType) {
-                    "Search"-> {
-                        currentFragment = OnlineSearchFragment.newInstance(action)
-                        replace(R.id.container, currentFragment)
-                    }
                     "Assets"->{
                         currentFragment = FeedDiscoveryFragment.newInstance(action)
                         replace(R.id.container, currentFragment)
                     }
                     else-> {
-                        currentFragment = OnlineSearchFragment.newInstance(action)
+                        currentFragment = FeedDiscoveryFragment.newInstance(action)
                         replace(R.id.container, currentFragment)
                     }
                 }
@@ -73,12 +68,8 @@ class HostActivity : BaseActivity() {
         }
     }
 
-    fun showRssDetail(entry: SearchResult) {
-//        supportFragmentManager.beginTransaction().apply {
-//            replace(R.id.container, OnlineFeedViewFragment.newInstance(this@HostActivity,feedUrl!!, artworkUrl100!!))
-//            addToBackStack(null)
-//        }.commitAllowingStateLoss()
-        val intent = OnlineFeedViewActivity.newIntent(this, entry.trackName, entry.feedUrl!!, entry.artworkUrl100!!)
+    fun showRssDetail(entry: PodcastSearchResult) {
+        val intent = OnlineFeedViewActivity.newIntent(this, entry)
         startActivity(intent)
     }
     override fun onBackPressed() {

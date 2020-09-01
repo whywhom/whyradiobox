@@ -16,21 +16,21 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/media_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:contentDescription="@string/app_name"
             android:padding="8dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/listen_48px" />
+            android:src="@drawable/listen_48" />
 
-        <ImageView
+        <View
             android:id="@+id/gap"
-            android:layout_width="1px"
-            android:layout_height="50dp"
-            android:layout_toLeftOf="@id/media_play"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_toStartOf="@id/media_play"
             android:layout_centerVertical="true"
-            android:src="@color/colorPrimary"/>
+            android:background="@color/grayDark"/>
 
         <LinearLayout
             android:id="@+id/content"
@@ -46,13 +46,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_title"
-                android:textColor="@android:color/holo_blue_dark"/>
+                android:textColor="@android:color/black"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_date"
-                android:textColor="@android:color/holo_blue_dark"/>
+                android:textColor="@android:color/darker_gray"/>
 
             <TextView
                 android:layout_width="wrap_content"

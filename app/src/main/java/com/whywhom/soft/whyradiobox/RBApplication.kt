@@ -2,6 +2,8 @@ package com.whywhom.soft.whyradiobox
 
 import android.app.Application
 import android.content.Context
+import android.os.Build
+import com.whywhom.soft.whyradiobox.utils.Connectivity
 
 
 /**
@@ -14,6 +16,7 @@ open class RBApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         context = this
+        registerNetworkCallback()
     }
 
     override fun onLowMemory() {
@@ -26,5 +29,11 @@ open class RBApplication: Application() {
 
     override fun onTerminate() {
         super.onTerminate()
+    }
+
+    private fun registerNetworkCallback(){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            Connectivity.registerNetworkCallback(this)
+        }
     }
 }

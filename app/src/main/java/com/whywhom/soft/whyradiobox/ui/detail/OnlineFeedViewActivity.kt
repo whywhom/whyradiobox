@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.whywhom.soft.whyradiobox.R
+import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.ui.BaseActivity
 import com.whywhom.soft.whyradiobox.ui.main.OnlineFeedViewFragment
 
@@ -14,10 +15,10 @@ class OnlineFeedViewActivity : BaseActivity() {
         private var feed: String? = ""
         private var cover: String? = ""
         private var name: String? = ""
-        fun newIntent(context: Context?, trackname: String?, feedUrl: String?, coverUrl: String?):Intent {
-            name = trackname
-            feed = feedUrl
-            cover = coverUrl
+        fun newIntent(context: Context?, entry: PodcastSearchResult):Intent {
+            name = entry.title
+            feed = entry.feedUrl
+            cover = entry.imageUrl
             return Intent(context, OnlineFeedViewActivity::class.java)
         }
     }
@@ -35,6 +36,15 @@ class OnlineFeedViewActivity : BaseActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commitNow()
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
         }
     }
 }

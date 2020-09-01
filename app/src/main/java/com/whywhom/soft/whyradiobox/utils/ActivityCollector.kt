@@ -8,6 +8,7 @@ import java.util.*
  * Created by wuhaoyong on 20/08/20.
  */
 object ActivityCollector {
+
     private val activitys = Stack<WeakReference<Activity>>()
 
     /**

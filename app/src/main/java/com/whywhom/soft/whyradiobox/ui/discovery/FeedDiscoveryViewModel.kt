@@ -16,9 +16,9 @@ import kotlin.collections.ArrayList
 
 
 class FeedDiscoveryViewModel : BaseViewModel() {
-    var podcastCnnLiveData = MutableLiveData<ItunesSearchPodcast>()
-    var podcastBbcLiveData = MutableLiveData<ItunesSearchPodcast>()
-    var podcastVoaLiveData = MutableLiveData<ItunesSearchPodcast>()
+    var podcastCnnLiveData = MutableLiveData<ArrayList<PodcastSearchResult>>()
+    var podcastBbcLiveData = MutableLiveData<ArrayList<PodcastSearchResult>>()
+    var podcastVoaLiveData = MutableLiveData<ArrayList<PodcastSearchResult>>()
 
     fun getJsonDataFromAsset(context: Context, media: String) {
         launch(Dispatchers.IO) {
@@ -29,32 +29,53 @@ class FeedDiscoveryViewModel : BaseViewModel() {
                     "CNN" -> {
                         jsonString =
                             context.assets.open("cnn.json").bufferedReader().use { it.readText() }
-                        podcastCnnLiveData.postValue(
-                            gson.fromJson(
-                                jsonString,
-                                ItunesSearchPodcast::class.java
-                            )
+                        var itunesSearchPodcast = gson.fromJson(
+                            jsonString,
+                            ItunesSearchPodcast::class.java
                         )
+                        itunesSearchPodcast?.let {
+                            val results: java.util.ArrayList<PodcastSearchResult> =
+                                java.util.ArrayList<PodcastSearchResult>()
+                            for (i in 0 until itunesSearchPodcast.results.size) {
+                                var item = itunesSearchPodcast.results.get(i)
+                                results.add(PodcastSearchResult(item.trackName,item.artworkUrl100,item.feedUrl,item.artistName))
+                            }
+                            podcastCnnLiveData.postValue(results)
+                        }
                     }
                     "BBC" -> {
                         jsonString =
                             context.assets.open("bbc.json").bufferedReader().use { it.readText() }
-                        podcastBbcLiveData.postValue(
-                            gson.fromJson(
-                                jsonString,
-                                ItunesSearchPodcast::class.java
-                            )
+                        var itunesSearchPodcast = gson.fromJson(
+                            jsonString,
+                            ItunesSearchPodcast::class.java
                         )
+                        itunesSearchPodcast?.let {
+                            val results: java.util.ArrayList<PodcastSearchResult> =
+                                java.util.ArrayList<PodcastSearchResult>()
+                            for (i in 0 until itunesSearchPodcast.results.size) {
+                                var item = itunesSearchPodcast.results.get(i)
+                                results.add(PodcastSearchResult(item.trackName,item.artworkUrl100,item.feedUrl,item.artistName))
+                            }
+                            podcastBbcLiveData.postValue(results)
+                        }
                     }
                     "VOA" -> {
                         jsonString =
                             context.assets.open("voa.json").bufferedReader().use { it.readText() }
-                        podcastVoaLiveData.postValue(
-                            gson.fromJson(
-                                jsonString,
-                                ItunesSearchPodcast::class.java
-                            )
+                        var itunesSearchPodcast = gson.fromJson(
+                            jsonString,
+                            ItunesSearchPodcast::class.java
                         )
+                        itunesSearchPodcast?.let {
+                            val results: java.util.ArrayList<PodcastSearchResult> =
+                                java.util.ArrayList<PodcastSearchResult>()
+                            for (i in 0 until itunesSearchPodcast.results.size) {
+                                var item = itunesSearchPodcast.results.get(i)
+                                results.add(PodcastSearchResult(item.trackName,item.artworkUrl100,item.feedUrl,item.artistName))
+                            }
+                            podcastVoaLiveData.postValue(results)
+                        }
                     }
                 }
             } catch (ioException: IOException) {

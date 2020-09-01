@@ -59,6 +59,24 @@ data class PodcastSearchResult (
             }
             return PodcastSearchResult(title, imageUrl, feedUrl, author)
         }
-    }
+        fun fromItunesEntry(item: Entry): PodcastSearchResult {
+            val title: String? = item.title.label
+            var imageUrl: String? = null
+            val feedUrl: String? = "https://itunes.apple.com/lookup?id=" +
+                    item.id.attributes.imId
+            val author: String? = item.imArtist.label
 
+            val images = item.imImage
+            var i = 0
+            while (imageUrl == null && i < images.size) {
+                val image = images.get(i)
+                val height = image.attributes.height
+                if (height.toInt() >= 100) {
+                    imageUrl = image.label
+                }
+                i++
+            }
+            return PodcastSearchResult(title, imageUrl, feedUrl, author)
+        }
+    }
 }

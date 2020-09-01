@@ -5,12 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
-import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.model.Entry
-import com.whywhom.soft.whyradiobox.model.ItunesPodcastSearcher
+import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -21,9 +20,9 @@ import java.util.*
 class ItunesPodcastListAdapter(mainActivity: Activity): BaseAdapter() {
 
     private var mainActivityRef: WeakReference<Activity>? = WeakReference<Activity>(mainActivity)
-    private val data: MutableList<Entry> = ArrayList<Entry>()
+    private val data: MutableList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
 
-    fun updateData(newData: List<Entry>) {
+    fun updateData(newData: List<PodcastSearchResult>) {
         data.clear()
         data.addAll(newData!!)
         notifyDataSetChanged()
@@ -33,7 +32,7 @@ class ItunesPodcastListAdapter(mainActivity: Activity): BaseAdapter() {
         return data.size
     }
 
-    override fun getItem(position: Int): Entry {
+    override fun getItem(position: Int): PodcastSearchResult {
         return data[position]
     }
 
@@ -53,11 +52,11 @@ class ItunesPodcastListAdapter(mainActivity: Activity): BaseAdapter() {
         } else {
             holder = convertView.tag as Holder
         }
-        val item: Entry = getItem(position)
+        val item: PodcastSearchResult = getItem(position)
         holder.imageView!!.contentDescription = item.title.toString()
 
         val request: RequestCreator =
-            Picasso.get().load(item.imImage.get(item.imImage.size-1).label).placeholder(R.drawable.rss_64)
+            Picasso.get().load(item.imageUrl).placeholder(R.drawable.rss_96)
         request.fit()
             .centerCrop()
             .into(holder.imageView)

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Created by wuhaoyong on 2020-01-14.
  */
-data class ItunesPodcastSearcher(
+data class ItunesTopPodcast(
     val feed: Feed
 )
 
@@ -67,28 +67,29 @@ data class Attributes(
 )
 
 data class Id(
-    val attributes: AttributesX,
+    val attributes: AttributesId,
     val label: String
 )
 
-data class AttributesX(
+data class AttributesId(
+    @SerializedName("im:id")
     val imId: String
 )
 
 data class ImArtist(
-    val attributes: AttributesXX,
+    val attributes: AttributesImArtist,
     val label: String
 )
 
-data class AttributesXX(
+data class AttributesImArtist(
     val href: String
 )
 
 data class ImContentType(
-    val attributes: AttributesXXX
+    val attributes: AttributesImContentType
 )
 
-data class AttributesXXX(
+data class AttributesImContentType(
     val label: String,
     val term: String
 )

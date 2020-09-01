@@ -67,7 +67,7 @@
                     android:layout_centerVertical="true"
                     android:contentDescription="@string/app_name"
                     android:padding="4dp"
-                    android:src="@drawable/listen_48px"/>
+                    android:src="@drawable/listen_48"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

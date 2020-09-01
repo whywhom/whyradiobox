@@ -5,8 +5,9 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,20 +18,15 @@ import com.whywhom.soft.whyradiobox.event.FragmentEvent
 import com.whywhom.soft.whyradiobox.extensions.setListener
 import com.whywhom.soft.whyradiobox.interfaces.RecyclerListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
-import com.whywhom.soft.whyradiobox.model.SearchResult
 import com.whywhom.soft.whyradiobox.ui.BaseFragment
-import com.whywhom.soft.whyradiobox.ui.discovery.FeedDiscoveryFragment
-import com.whywhom.soft.whyradiobox.ui.main.HostActivity
-import com.whywhom.soft.whyradiobox.ui.main.OnlineFeedViewFragment
 import com.whywhom.soft.whyradiobox.utils.KeyboardUtils
-import kotlinx.android.synthetic.main.app_bar_main_drawer.*
 import kotlinx.android.synthetic.main.fragment_discovery_feed.*
 import org.greenrobot.eventbus.EventBus
 
 
 class OnlineSearchFragment : BaseFragment(), PodcastListAdapter.ItemClickListenter {
     private var mSearchView: SearchView? = null
-    var podcastList:ArrayList<SearchResult> = ArrayList<SearchResult>()
+    var podcastList:ArrayList<PodcastSearchResult> = ArrayList<PodcastSearchResult>()
     companion object {
         private lateinit var queryStr: String
         fun newInstance(query: String):Fragment{
@@ -57,7 +53,6 @@ class OnlineSearchFragment : BaseFragment(), PodcastListAdapter.ItemClickListent
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(OnlineSearchViewModel::class.java)
         initToolbar()
-
         val adapter = PodcastListAdapter(podcastList, context)
         adapter.setOnItemClick(this)
         podcast_list.layoutManager = LinearLayoutManager(activity)
@@ -75,25 +70,29 @@ class OnlineSearchFragment : BaseFragment(), PodcastListAdapter.ItemClickListent
             }
         })
         viewModel.podcastListLiveData.observe(viewLifecycleOwner, Observer { it ->
-            podcastList = it.results as ArrayList<SearchResult>
+            podcastList = it as ArrayList<PodcastSearchResult>
             adapter.submitList(podcastList)
             adapter.notifyDataSetChanged()
             swipeRefreshLayout.setRefreshing(false);
         })
 
     }
-
+    private fun getActionbar() : ActionBar? {
+        return (activity as AppCompatActivity).supportActionBar
+    }
     private fun initToolbar() {
-        toolbar?.title = ""
-        toolbar.navigationIcon =
-            getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24, null)
-        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
-        toolbar.inflateMenu(R.menu.menu_search);
-        setupSearch(toolbar.menu)
+        getActionbar()?.title = ""
+//        toolbar.navigationIcon =
+//            getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24, null)
+//        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
+//        toolbar.inflateMenu(R.menu.menu_search);
+        getActionbar()?.setDisplayHomeAsUpEnabled(true)//显示返回图标
+        getActionbar()?.setHomeButtonEnabled(true);//主键按钮能否可点击
+//        setupSearch(toolbar.menu)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.menu_search, menu)
+        inflater.inflate(R.menu.menu_search, menu)
         setupSearch(menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -157,6 +156,6 @@ class OnlineSearchFragment : BaseFragment(), PodcastListAdapter.ItemClickListent
         if (entry.feedUrl == null) {
             return
         }
-        EventBus.getDefault().post(FragmentEvent(HostActivity::class.java, entry))
+        EventBus.getDefault().post(FragmentEvent(OnlineSearchActivity::class.java, entry))
     }
 }

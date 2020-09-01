@@ -89,7 +89,7 @@ abstract class RSSBase {
   }
   public void setAuthor(String author) { this.author = author;}
 
-  public String getAuthor(String author) { return this.author;}
+  public String getAuthor() { return this.author;}
 
   public void setDuration(String duration) { this.author = duration;}
 

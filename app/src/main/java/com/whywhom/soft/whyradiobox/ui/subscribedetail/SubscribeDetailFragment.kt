@@ -135,7 +135,7 @@ class SubscribeDetailFragment : Fragment(), OnItemClickListener, SubscribeDetail
             }
         }
 
-        val request: RequestCreator = Picasso.get().load(coverUrl).placeholder(R.drawable.rss_64)
+        val request: RequestCreator = Picasso.get().load(coverUrl).placeholder(R.drawable.rss_96)
         request.fit()
             .centerCrop()
             .into(imgvCover)

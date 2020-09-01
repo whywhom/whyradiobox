@@ -10,7 +10,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/rss_64"/>
+        android:src="@drawable/rss_96"/>
     <TextView
         android:id="@+id/subscribe_title"
         android:layout_width="match_parent"
