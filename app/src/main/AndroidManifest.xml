@@ -23,9 +23,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <service
-            android:name=".services.MediaService"
+            android:name=".services.MediaDownloadService"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".services.MediaPlayService"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
             android:name=".ui.splash.SplashActivity"

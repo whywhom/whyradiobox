@@ -22,15 +22,15 @@
             android:padding="8dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_download_black" />
+            android:src="@drawable/ic_download_cloud" />
 
-        <ImageView
+        <View
             android:id="@+id/gap"
             android:layout_width="1px"
             android:layout_height="50dp"
             android:layout_toStartOf="@id/item_control"
             android:layout_centerVertical="true"
-            android:src="@color/colorPrimary"/>
+            android:background="@color/colorPrimary"/>
 
         <LinearLayout
             android:id="@+id/content"

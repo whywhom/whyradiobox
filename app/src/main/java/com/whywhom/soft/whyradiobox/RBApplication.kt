@@ -2,7 +2,6 @@ package com.whywhom.soft.whyradiobox
 
 import android.app.Application
 import android.content.Context
-import android.os.Build
 import com.whywhom.soft.whyradiobox.utils.Connectivity
 
 

@@ -1,6 +1,7 @@
 package com.whywhom.soft.whyradiobox.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.data.source.local.FeedItem
 import com.whywhom.soft.whyradiobox.interfaces.OnItemClickListener
-import com.whywhom.soft.whyradiobox.interfaces.OnPlayListener
+import com.whywhom.soft.whyradiobox.services.MediaDownloadService
 import com.whywhom.soft.whyradiobox.utils.Constants
-import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_DOWNLOAD
-import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_DOWNLOADED
-import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_DOWNLOADING
-import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_PAUSE
-import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_PLAYING
 import com.whywhom.soft.whyradiobox.utils.Constants.CONTROL_TYPE_UNDOWNLOAD
 
 /**
@@ -43,7 +39,29 @@ class SubscriptionListAdapter(val mContext: Context, val rssList: ArrayList<Feed
         holder.itemSize.text = Constants.getFileSize(itemData.length.toLong())
         holder.itemControl.setOnClickListener(View.OnClickListener {
             itemClickListerer.onItemClick(position)
+            when(itemData.controlType) {
+                CONTROL_TYPE_UNDOWNLOAD->{
+                    println("UNDOWNLOAD")
+                    beginDownload(itemData)
+                }
+                Constants.CONTROL_TYPE_DOWNLOAD ->println("DOWNLOAD")
+                Constants.CONTROL_TYPE_DOWNLOADING ->println("DOWNLOADING")
+                Constants.CONTROL_TYPE_DOWNLOADED ->println("DOWNLOADED")
+                Constants.CONTROL_TYPE_PLAYING ->println("PLAYING")
+                Constants.CONTROL_TYPE_PAUSE ->println("PAUSE")
+            }
         })
+    }
+
+    private fun beginDownload(itemData: FeedItem) {
+        val intent = Intent(mContext, MediaDownloadService::class.java)
+        MediaDownloadService.setDownloadData(itemData)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            mContext.startForegroundService(intent)
+        } else{
+            mContext.startService(intent)
+        }
+
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

@@ -6,7 +6,6 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.IBinder
 import android.support.v4.media.session.PlaybackStateCompat
@@ -14,7 +13,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.Player.EventListener
-import com.google.android.exoplayer2.offline.DownloadService
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -28,8 +26,8 @@ import com.whywhom.soft.whyradiobox.rss.RSSItem
 import com.whywhom.soft.whyradiobox.utils.PlayerUtil
 
 
-class MediaService : Service() {
-    val TAG = MediaService::class.java.name
+class MediaPlayService : Service() {
+    val TAG = MediaPlayService::class.java.name
     private var player: SimpleExoPlayer? = null
     private var playerNotificationManager: PlayerNotificationManager? = null
     private lateinit var mediaSource: MediaSource

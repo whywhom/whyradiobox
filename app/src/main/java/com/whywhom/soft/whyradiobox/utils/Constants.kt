@@ -6,6 +6,7 @@ import com.whywhom.soft.whyradiobox.data.RBNetwork
 import com.whywhom.soft.whyradiobox.data.RBRepository
 import com.whywhom.soft.whyradiobox.ui.home.HomeViewModelFactory
 import java.math.BigDecimal
+import kotlin.math.abs
 
 /**
  * Created by wuhaoyong on 2020-02-13.
@@ -26,6 +27,9 @@ object Constants{
     fun getFileSize(size: Long): String? {
         // 如果字节数少于1024，则直接以B为单位，否则先除于1024，后3位因太少无意义
         var value = size.toDouble()
+        if(abs(value)<0.01){
+            return ""
+        }
         value = if (value < 1024) {
             return value.toString() + "B"
         } else {

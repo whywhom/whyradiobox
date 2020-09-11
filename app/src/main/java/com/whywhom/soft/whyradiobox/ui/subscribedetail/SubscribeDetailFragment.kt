@@ -143,14 +143,14 @@ class SubscribeDetailFragment : Fragment(), OnItemClickListener, SubscribeDetail
 
     override fun onItemClick(position: Int) {
         var itemData = feedItemList.get(position)
-        when(itemData.controlType) {
-            CONTROL_TYPE_UNDOWNLOAD->println("UNDOWNLOAD")
-            Constants.CONTROL_TYPE_DOWNLOAD ->println("DOWNLOAD")
-            Constants.CONTROL_TYPE_DOWNLOADING ->println("DOWNLOADING")
-            Constants.CONTROL_TYPE_DOWNLOADED ->println("DOWNLOADED")
-            Constants.CONTROL_TYPE_PLAYING ->println("PLAYING")
-            Constants.CONTROL_TYPE_PAUSE ->println("PAUSE")
-        }
+//        when(itemData.controlType) {
+//            CONTROL_TYPE_UNDOWNLOAD->println("UNDOWNLOAD")
+//            Constants.CONTROL_TYPE_DOWNLOAD ->println("DOWNLOAD")
+//            Constants.CONTROL_TYPE_DOWNLOADING ->println("DOWNLOADING")
+//            Constants.CONTROL_TYPE_DOWNLOADED ->println("DOWNLOADED")
+//            Constants.CONTROL_TYPE_PLAYING ->println("PLAYING")
+//            Constants.CONTROL_TYPE_PAUSE ->println("PAUSE")
+//        }
     }
 
 }

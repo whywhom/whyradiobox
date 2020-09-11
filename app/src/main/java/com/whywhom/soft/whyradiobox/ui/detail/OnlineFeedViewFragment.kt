@@ -1,26 +1,18 @@
 package com.whywhom.soft.whyradiobox.ui.main
 
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import com.whywhom.soft.whyradiobox.R
@@ -29,7 +21,7 @@ import com.whywhom.soft.whyradiobox.interfaces.OnPlayListener
 import com.whywhom.soft.whyradiobox.model.PodcastSearchResult
 import com.whywhom.soft.whyradiobox.rss.RSSFeed
 import com.whywhom.soft.whyradiobox.rss.RSSItem
-import com.whywhom.soft.whyradiobox.services.MediaService
+import com.whywhom.soft.whyradiobox.services.MediaPlayService
 import com.whywhom.soft.whyradiobox.ui.BaseFragment
 import com.whywhom.soft.whyradiobox.ui.detail.OnlineFeedViewModel
 import com.whywhom.soft.whyradiobox.ui.subscribedetail.SubscribeDetailActivity
@@ -223,8 +215,8 @@ class OnlineFeedViewFragment : BaseFragment(), OnPlayListener, OnlineFeedViewMod
 //            }
 //        }
 //        this.context?.let { PlayerUtil.initListener(it,mediaDescriptionAdapter) }
-        val intent = Intent(this.context, MediaService::class.java)
-        MediaService.setDataSource(rssItem)
+        val intent = Intent(this.context, MediaPlayService::class.java)
+        MediaPlayService.setDataSource(rssItem)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             activity.startForegroundService(intent)
         } else{
