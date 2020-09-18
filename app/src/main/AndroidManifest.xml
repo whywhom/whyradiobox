@@ -25,11 +25,16 @@
         <service
             android:name=".services.MediaDownloadService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.exoplayer.downloadService.action.RESTART"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
         <service
             android:name=".services.MediaPlayService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".ui.splash.SplashActivity"

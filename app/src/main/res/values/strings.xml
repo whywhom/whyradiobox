@@ -139,4 +139,6 @@
     <string name="library">Library</string>
     <string name="personal">Personal</string>
     <string name="press_again_to_exit">再按一次退出%1$s</string>
+    <string name="track_selection_title">Select tracks</string>
+    <string name="download_start_error">Failed to start download</string>
 </resources>

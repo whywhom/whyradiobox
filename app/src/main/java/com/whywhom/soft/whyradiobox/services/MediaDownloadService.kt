@@ -9,10 +9,11 @@ import com.google.android.exoplayer2.scheduler.PlatformScheduler
 import com.google.android.exoplayer2.ui.DownloadNotificationHelper
 import com.google.android.exoplayer2.util.NotificationUtil
 import com.google.android.exoplayer2.util.Util
+import com.whywhom.soft.whyradiobox.R
 import com.whywhom.soft.whyradiobox.RBApplication
 import com.whywhom.soft.whyradiobox.utils.Constants.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 
-class DemoDownloadService : DownloadService(
+class MediaDownloadService : DownloadService(
     FOREGROUND_NOTIFICATION_ID,
     DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL,
     DOWNLOAD_NOTIFICATION_CHANNEL_ID,
@@ -39,20 +40,13 @@ class DemoDownloadService : DownloadService(
     }
 
     override fun getForegroundNotification(downloads: List<Download>): Notification {
-        return (application as DemoApplication)
+        return (application as RBApplication)
             .getDownloadNotificationHelper()
             .buildProgressNotification(
                 R.drawable.ic_download,  /* contentIntent= */null,  /* message= */null, downloads
             )
     }
 
-    /**
-     * Creates and displays notifications for downloads when they complete or fail.
-     *
-     *
-     * This helper will outlive the lifespan of a single instance of [DemoDownloadService].
-     * It is static to avoid leaking the first [DemoDownloadService] instance.
-     */
     private class TerminalStateNotificationHelper(
         context: Context, notificationHelper: DownloadNotificationHelper, firstNotificationId: Int
     ) :
