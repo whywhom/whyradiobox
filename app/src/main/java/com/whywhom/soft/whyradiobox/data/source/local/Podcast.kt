@@ -43,4 +43,13 @@ data class Podcast @JvmOverloads constructor(
 
     @ColumnInfo(name = "coverurl")
     var coverurl: String = ""
+
+    @ColumnInfo(name = "download")
+    var downloadState : Int = 0 //0: online; 1: downloaded; 2:downloading; 3:pause
+
+    @ColumnInfo(name = "contentlength")
+    var contentLength: Long = 0
+
+    @ColumnInfo(name = "currentbytes")
+    var currentBytes: Long = 0
 }
