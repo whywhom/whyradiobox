@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleProgressBar">
+        <!--default circle color-->
+        <attr name="defaultColor" format="color" />
+        <!--progressbar color-->
+        <attr name="reachedColor" format="color" />
+        <!--default circle height-->
+        <attr name="defaultHeight" format="dimension" />
+        <!--progressbar height-->
+        <attr name="reachedHeight" format="dimension" />
+        <!--radius-->
+        <attr name="radius" format="dimension" />
+    </declare-styleable>
+</resources>
